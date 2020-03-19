@@ -40,12 +40,15 @@
     <remote-table/>
     <h3>Grouped Table</h3>
      <grouped-table></grouped-table>
+    <h3>Nested Expanded Table</h3>
+     <nested-expanded-table></nested-expanded-table>
   </div>
 </template>
 
 <script>
 import GroupedTable from './grouped-table.vue';
 import RemoteTable from './remote-table.vue';
+import NestedExpandedTable from './nested-expanded-table.vue';
 
 export default {
   name: 'test',
@@ -447,6 +450,7 @@ export default {
   components: {
     'grouped-table': GroupedTable,
     RemoteTable,
+    'nested-expanded-table': NestedExpandedTable
   },
 };
 </script>
