@@ -4,7 +4,8 @@
       <!-- if group row header is at the top -->
       <vgt-header-row
         v-if="groupHeaderOnTop"
-        @vgtExpand="toggleExpand(1)"
+        v-show="displayed"
+        @vgtExpand="toggleExpand()"
         :header-row="row"
         :columns="columns"
         :line-numbers="lineNumbers"
@@ -24,14 +25,13 @@
           ></slot>
         </template>
       </vgt-header-row>
-
       <vgt-row-hierarchy
-        v-for="child in row.children"
+        v-for="(child, index) in row.children"
         :row="child"
-        :key="child.name"
+        :key="index"
+        :displayed="expanded && displayed"
         :groupHeaderOnTop="groupHeaderOnTop"
         :groupHeaderOnBottom="groupHeaderOnBottom"
-        @toggleExpand="toggleExpand(1)"
         :columns="columns"
         :line-numbers="lineNumbers"
         :selectable="selectable"
@@ -48,10 +48,10 @@
         @on-row-click="onRowClicked(child, index, $event)"
         @on-row-aux-click="onRowAuxClicked(child, index, $event)"
       ></vgt-row-hierarchy>
-
       <!-- if group row header is at the bottom -->
       <vgt-header-row
         v-if="groupHeaderOnBottom"
+        v-show="displayed"
         :header-row="headerRow"
         :columns="columns"
         :line-numbers="lineNumbers"
@@ -73,6 +73,7 @@
     </fragment>
     <fragment v-else>
       <tr
+        v-if="displayed"
         :key="row.originalIndex"
         :class="rowClass"
         @mouseenter="onMouseenter(row, index)"
@@ -119,9 +120,13 @@ import VgtHeaderRow from "./VgtHeaderRow.vue";
 
 export default {
   name: "VgtRowHierarchy",
+  data() {
+    return { expanded: true };
+  },
   props: {
     row: {},
     index: 1,
+    displayed: { default: true },
     groupHeaderOnTop: {},
     groupHeaderOnBottom: {},
     columns: {},
@@ -137,8 +142,8 @@ export default {
     rowClass: {}
   },
   methods: {
-    toggleExpand(index) {
-      this.$emit("toggleExpand", index);
+    toggleExpand() {
+      this.expanded = !this.expanded;
     },
 
     onMouseenter(row, index) {
