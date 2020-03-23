@@ -1,7 +1,7 @@
 <template>
   <fragment v-if="row">
     <tr
-      v-if="displayed"
+      v-show="displayed"
       :key="row.originalIndex"
       :class="rowClasses"
       @mouseenter="onMouseenter(row, index)"
@@ -17,6 +17,7 @@
         class="vgt-checkbox-col"
       >
         <input type="checkbox" :checked="row.vgtSelected" />
+        <span v-if="row.children" @click="toggleExpand()" class="expand"></span>
       </th>
       <td
         @click="onCellClicked(row, column, index, $event)"
@@ -36,9 +37,6 @@
           <span v-if="column.html" v-html="collect(row, column.field)"></span>
         </slot>
       </td>
-      <th>
-        <span class="triangle" :class="{ 'expand': row.vgtIsExpanded }" @click="toggleExpand()"></span>
-      </th>
     </tr>
     <vgt-rows
       v-if="row.children && row.children.length"
@@ -127,9 +125,6 @@ export default {
     },
 
     onRowClicked(row, index, event) {
-      if (this.selectable && !this.selectOnCheckboxOnly) {
-        this.$set(row, "vgtSelected", !row.vgtSelected);
-      }
       this.$emit("on-row-click", {
         row,
         pageIndex: index,
@@ -157,7 +152,6 @@ export default {
     },
 
     onCheckboxClicked(row, index, event) {
-      this.$set(row, "vgtSelected", !row.vgtSelected);
       this.$emit("on-checkbox-clicked", {
         row,
         pageIndex: index,

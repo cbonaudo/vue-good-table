@@ -905,14 +905,19 @@ export default {
       });
     },
 
+    changeSelectionRecursive(selectedRows, newValue) {
+      each(selectedRows, (row, i) => {
+        this.$set(row, "vgtSelected", newValue);
+        if (row.children) {
+          this.changeSelectionRecursive(row.children, newValue);
+        }
+      });
+    },
+
     unselectAllInternal(forceAll) {
       const rows =
         this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
-      each(rows, (headerRow, i) => {
-        each(headerRow.children, (row, j) => {
-          this.$set(row, "vgtSelected", false);
-        });
-      });
+      this.changeSelectionRecursive(rows, false);
       this.emitSelectedRows();
     },
 
@@ -922,11 +927,7 @@ export default {
         return;
       }
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
-      each(rows, headerRow => {
-        each(headerRow.children, row => {
-          this.$set(row, "vgtSelected", true);
-        });
-      });
+      this.changeSelectionRecursive(rows, true);
       this.emitSelectedRows();
     },
 
