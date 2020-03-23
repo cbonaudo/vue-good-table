@@ -113,7 +113,7 @@
           <!-- Table body starts here -->
           <tbody v-for="(headerRow, index) in paginated" :key="index">
             <!--    -->
-            <vgt-row-hierarchy
+            <vgt-rows
               :row="headerRow"
               :groupHeaderOnTop="groupHeaderOnTop"
               :groupHeaderOnBottom="groupHeaderOnBottom"
@@ -132,7 +132,9 @@
               @on-row-dblclick="onRowDoubleClicked(headerRow, index, $event)"
               @on-row-click="onRowClicked(headerRow, index, $event)"
               @on-row-aux-click="onRowAuxClicked(headerRow, index, $event)"
-            ></vgt-row-hierarchy>
+              @on-checkbox-clicked="onCheckboxClicked(headerRow, index, $event)"
+              @on-cell-clicked="onCellClicked(headerRow, column, index, $event)"
+            ></vgt-rows>
             <!-- if group row header is at the top -->
             <!-- <vgt-header-row
               v-if="groupHeaderOnTop"
@@ -273,6 +275,7 @@ import VgtGlobalSearch from "./VgtGlobalSearch.vue";
 import VgtTableHeader from "./VgtTableHeader.vue";
 import VgtHeaderRow from "./VgtHeaderRow.vue";
 import VgtRowHierarchy from "./VgtRowHierarchy.vue";
+import VgtRows from "./VgtRows.vue";
 
 // here we load each data type module.
 import * as CoreDataTypes from "./types/index";
@@ -1496,7 +1499,7 @@ export default {
     "vgt-global-search": VgtGlobalSearch,
     "vgt-header-row": VgtHeaderRow,
     "vgt-table-header": VgtTableHeader,
-    "vgt-row-hierarchy": VgtRowHierarchy
+    "vgt-rows": VgtRows
   }
 };
 </script>

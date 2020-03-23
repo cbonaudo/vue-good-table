@@ -25,6 +25,7 @@
           ></slot>
         </template>
       </vgt-header-row>
+
       <vgt-row-hierarchy
         v-for="(child, index) in row.children"
         :row="child"
