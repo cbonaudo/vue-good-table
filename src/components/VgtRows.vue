@@ -45,17 +45,12 @@
       :key="`row-${index}`"
       :level="level + 1"
       :displayed="expanded && displayed"
-      :groupHeaderOnTop="groupHeaderOnTop"
-      :groupHeaderOnBottom="groupHeaderOnBottom"
       :columns="columns"
       :line-numbers="lineNumbers"
       :selectable="selectable"
-      :groupOptions="groupOptions"
       :collect-formatted="collectFormatted"
       :formatted-row="formattedRow"
       :get-classes="getClasses"
-      :full-colspan="fullColspan"
-      :hasHeaderRowTemplate="hasHeaderRowTemplate"
       :rowClass="rowClass"
       @on-row-mouseenter="onMouseenter(child, index)"
       @on-row-mouseleave="onMouseleave(child, index)"
@@ -83,17 +78,12 @@ export default {
     index: 1,
     level: { default: 1 },
     displayed: { default: true },
-    groupHeaderOnTop: {},
-    groupHeaderOnBottom: {},
     columns: {},
     "line-numbers": {},
     selectable: {},
-    groupOptions: {},
     "collect-formatted": {},
     "formatted-row": {},
     "get-classes": {},
-    "full-colspan": {},
-    hasHeaderRowTemplate: {},
     rowClass: {}
   },
   methods: {
