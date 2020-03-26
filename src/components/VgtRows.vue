@@ -66,7 +66,6 @@
 <script>
 import { Fragment } from "vue-fragment";
 import number from "./types/number";
-import VgtHeaderRow from "./VgtHeaderRow.vue";
 
 export default {
   name: "VgtRows",
@@ -157,7 +156,6 @@ export default {
   },
   components: {
     Fragment,
-    "vgt-header-row": VgtHeaderRow
   }
 };
 </script>

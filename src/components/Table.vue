@@ -112,7 +112,6 @@
 
           <!-- Table body starts here -->
           <tbody v-for="(headerRow, index) in paginated" :key="index">
-            <!--    -->
             <vgt-rows
               :row="headerRow"
               :groupHeaderOnTop="groupHeaderOnTop"
@@ -274,7 +273,6 @@ import VgtPagination from "./VgtPagination.vue";
 import VgtGlobalSearch from "./VgtGlobalSearch.vue";
 import VgtTableHeader from "./VgtTableHeader.vue";
 import VgtHeaderRow from "./VgtHeaderRow.vue";
-import VgtRowHierarchy from "./VgtRowHierarchy.vue";
 import VgtRows from "./VgtRows.vue";
 
 // here we load each data type module.
