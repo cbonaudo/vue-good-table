@@ -4,7 +4,8 @@
     :rows="rows"
     :select-options="{
       enabled: true,
-      selectOnCheckboxOnly: true
+      selectOnCheckboxOnly: true,
+      selectHeader: true,
     }"
     @on-select-all="onSelectAll"
     @on-search="onSelectAll"

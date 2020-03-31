@@ -1241,7 +1241,30 @@ You can provide html for empty state slot as well. Example:
     This will show up when there are no columns
   </div>
 </vue-good-table>
-``` -->
+``` 
+
+## Use with multiple depth children
+
+All rows provided (and their children) must contains a children property, with an array of rows, following the same pattern as the first parent row :
+[
+  { 
+    name: "John", diet: "Pizza", children: [
+    { name: "Johnson", diet: "Various", children: [
+      { name: "Sally", diet: "Meat"},
+      { name: "Polly", diet: "Fish"}
+    ]}
+  ]},
+  {
+    name: "Maria", diet: "Vegetables"
+  }
+]
+A headerfield can be passed to a column to calculte, for example the total sum of a parent
+
+GroupOptions.collapsable allows to pass -1 to add the expand arrow in the checkbox column.
+
+SortOptions.depthLevel (default 1, based on 0) allows to sort the array of array at the depth selected
+
+-->
 
 ## Authors
 
