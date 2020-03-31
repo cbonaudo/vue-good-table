@@ -355,6 +355,7 @@ export default {
           selectionText: 'rows selected',
           clearSelectionText: 'clear',
           disableSelectInfo: false,
+          selectHeader: false,
         };
       },
     },
@@ -588,11 +589,7 @@ export default {
     selectedRows() {
       const selectedRows = [];
       each(this.processedRows, (headerRow) => {
-        each(headerRow.children, (row) => {
-          if (row.vgtSelected) {
-            selectedRows.push(row);
-          }
-        });
+        selectedRows.push(...this.recursiveSelectedRows(headerRow));
       });
       return selectedRows.sort((r1, r2) => r1.originalIndex - r2.originalIndex);
     },
@@ -636,7 +633,10 @@ export default {
     totalRowCount() {
       let total = 0;
       each(this.processedRows, (headerRow) => {
-        total += headerRow.children ? headerRow.children.length : 0;
+        if (this.selectOptions.selectHeader) {
+          total++;
+        }
+        total += this.recursiveRowCount(headerRow);
       });
       return total;
     },
@@ -1515,12 +1515,28 @@ export default {
       }
     },
 
-    // initializeColumns() {
-    //   // take care of default sort on mount
-    //   if (this.defaultSortBy) {
-    //     this.handleDefaultSort();
-    //   }
-    // },
+    recursiveRowCount(row) {
+      let total = 0;
+      if (row.children) {
+        row.children.forEach((child) => {
+          total++;
+          total += this.recursiveRowCount(child);
+        });
+      }
+      return total;
+    },
+    
+    recursiveSelectedRows(row) {
+      let selectedRows = []
+      if (row.vgtSelected) {
+        selectedRows.push(row);
+      }
+      each(row.children, (child) => {
+        selectedRows.push(...this.recursiveSelectedRows(child));
+      });
+      return selectedRows;
+    },
+
   },
 
   mounted() {
