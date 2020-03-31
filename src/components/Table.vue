@@ -156,6 +156,7 @@
               :line-numbers="lineNumbers"
               :selectable="selectable"
               :collapsable="groupOptions.collapsable"
+              :onCheckboxClicked="onCheckboxClicked"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
@@ -176,57 +177,52 @@
               </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
-            <tr
-              v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true"
+            <vgt-rows 
+              v-if="headerRow.children && headerRow.children.length"
               v-for="(row, index) in headerRow.children"
-              :key="row.originalIndex"
-              :class="getRowStyleClass(row)"
-              @mouseenter="onMouseenter(row, index)"
-              @mouseleave="onMouseleave(row, index)"
-              @dblclick="onRowDoubleClicked(row, index, $event)"
-              @click="onRowClicked(row, index, $event)"
-              @auxclick="onRowAuxClicked(row, index, $event)">
-              <th
-                v-if="lineNumbers"
-                class="line-numbers"
+              :key="index"
+              :index="index"
+              :headerRow="headerRow"
+              :row="row"
+              :groupOptions="groupOptions"
+              :getRowStyleClass="getRowStyleClass"
+              :getClasses="getClasses"
+              :tableStyleClasses="tableStyleClasses"
+              :lineNumbers="lineNumbers"
+              :selectable="selectable"
+              :columns="columns"
+              :collectFormatted="collectFormatted"
+              :fullColspan="fullColspan"
+              :formattedRow="formattedRow"
+              :getCurrentIndex="getCurrentIndex"
+              :onMouseenter="onMouseenter"
+              :onMouseleave="onMouseleave"
+              :onRowDoubleClicked="onRowDoubleClicked"
+              :onRowClicked="onRowClicked"
+              :onRowAuxClicked="onRowAuxClicked"
+              :onCheckboxClicked="onCheckboxClicked"
+              :onCellClicked="onCellClicked"
               >
-                {{ getCurrentIndex(index) }}
-              </th>
-              <th
-                v-if="selectable"
-                @click.stop="onCheckboxClicked(row, index, $event)"
-                class="vgt-checkbox-col"
-              >
-                <input
-                  type="checkbox"
-                  :checked="row.vgtSelected"
-                />
-              </th>
-              <td
-                @click="onCellClicked(row, column, index, $event)"
-                v-for="(column, i) in columns"
-                :key="i"
-                :class="getClasses(i, 'td', row)"
-                v-if="!column.hidden && column.field"
-              >
+              <template
+                slot="table-header-row"
+                slot-scope="props">
                 <slot
                   name="table-row"
-                  :row="row"
-                  :column="column"
-                  :formattedRow="formattedRow(row)"
-                  :index="index"
-                >
-                  <span v-if="!column.html">
-                    {{ collectFormatted(row, column) }}
+                  :row="props.row"
+                  :column="props.column"
+                  :formattedRow="formattedRow(props.row)"
+                  :index="props.index">
+                  <span v-if="!props.column.html">
+                      {{ collectFormatted(props.row, props.column) }}
                   </span>
                   <span
-                    v-if="column.html"
-                    v-html="collect(row, column.field)"
+                      v-if="props.column.html"
+                      v-html="collect(props.row, column.field)"
                   >
                   </span>
                 </slot>
-              </td>
-            </tr>
+              </template>
+            </vgt-rows>
             <!-- if group row header is at the bottom -->
             <vgt-header-row
               v-if="groupHeaderOnBottom"
@@ -234,6 +230,7 @@
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
+              :onCheckboxClicked="onCheckboxClicked"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
@@ -313,6 +310,7 @@ import VgtPagination from './VgtPagination.vue';
 import VgtGlobalSearch from './VgtGlobalSearch.vue';
 import VgtTableHeader from './VgtTableHeader.vue';
 import VgtHeaderRow from './VgtHeaderRow.vue';
+import VgtRows from './VgtRows.vue';
 
 // here we load each data type module.
 import * as CoreDataTypes from './types/index';
@@ -367,6 +365,7 @@ export default {
         return {
           enabled: true,
           initialSortBy: {},
+          depthLevel: 1
         };
       },
     },
@@ -762,33 +761,7 @@ export default {
       }
       if (this.sorts.length) {
         //* we need to sort
-        computedRows.forEach((cRows) => {
-          cRows.children.sort((xRow, yRow) => {
-            //* we need to get column for each sort
-            let sortValue;
-            for (let i = 0; i < this.sorts.length; i += 1) {
-              const column = this.getColumnForField(this.sorts[i].field);
-              const xvalue = this.collect(xRow, this.sorts[i].field);
-              const yvalue = this.collect(yRow, this.sorts[i].field);
-
-              //* if a custom sort function has been provided we use that
-              const { sortFn } = column;
-              if (sortFn && typeof sortFn === 'function') {
-                sortValue =
-                  sortValue ||
-                  sortFn(xvalue, yvalue, column, xRow, yRow) *
-                    (this.sorts[i].type === 'desc' ? -1 : 1);
-              } else {
-                //* else we use our own sort
-                sortValue =
-                  sortValue ||
-                  column.typeDef.compare(xvalue, yvalue, column) *
-                    (this.sorts[i].type === 'desc' ? -1 : 1);
-              }
-            }
-            return sortValue;
-          });
-        });
+        this.recursiveSort(computedRows, this.sortOptions.depthLevel === undefined ? 1 : this.sortOptions.depthLevel  );
       }
 
       // if the filtering is event based, we need to maintain filter
@@ -799,7 +772,7 @@ export default {
 
       return computedRows;
     },
-
+    
     paginated() {
       if (!this.processedRows.length) return [];
 
@@ -841,7 +814,7 @@ export default {
         const i = headerRow.vgt_header_id;
         const children = filter(paginatedRows, ['vgt_id', i]);
         if (children.length) {
-          const newHeaderRow = cloneDeep(headerRow);
+          const newHeaderRow = headerRow;
           newHeaderRow.children = children;
           reconstructedRows.push(newHeaderRow);
         }
@@ -939,15 +912,18 @@ export default {
         selectedRows: this.selectedRows,
       });
     },
+    
+    recursiveSelect(rows, newValue) {
+      each(rows, (row) => {
+        this.$set(row, 'vgtSelected', newValue);
+        row.children && this.recursiveSelect(row.children, newValue);
+      });
+    },
 
     unselectAllInternal(forceAll) {
       const rows =
         this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
-      each(rows, (headerRow, i) => {
-        each(headerRow.children, (row, j) => {
-          this.$set(row, 'vgtSelected', false);
-        });
-      });
+      this.recursiveSelect(rows, false)
       this.emitSelectedRows();
     },
 
@@ -957,11 +933,7 @@ export default {
         return;
       }
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
-      each(rows, (headerRow) => {
-        each(headerRow.children, (row) => {
-          this.$set(row, 'vgtSelected', true);
-        });
-      });
+      this.recursiveSelect(rows, true)
       this.emitSelectedRows();
     },
 
@@ -1509,6 +1481,40 @@ export default {
       }
     },
 
+    sorting(xRow, yRow)  {
+      //* we need to get column for each sort
+      let sortValue;
+      for (let i = 0; i < this.sorts.length; i += 1) {
+        const column = this.getColumnForField(this.sorts[i].field);
+        const xvalue = this.collect(xRow, this.sorts[i].field);
+        const yvalue = this.collect(yRow, this.sorts[i].field);
+
+        //* if a custom sort function has been provided we use that
+        const { sortFn } = column;
+        if (sortFn && typeof sortFn === 'function') {
+          sortValue =
+            sortValue ||
+            sortFn(xvalue, yvalue, column, xRow, yRow) *
+              (this.sorts[i].type === 'desc' ? -1 : 1);
+        } else {
+          //* else we use our own sort
+          sortValue =
+            sortValue ||
+            column.typeDef.compare(xvalue, yvalue, column) *
+              (this.sorts[i].type === 'desc' ? -1 : 1);
+        }
+      }
+      return sortValue;
+    },
+
+    recursiveSort(rows, depthLevelRemaining) {
+      if (depthLevelRemaining && rows[0].children) {
+        rows.forEach((row) => this.recursiveSort(row.children, --depthLevelRemaining));
+      } else {
+        rows.sort(this.sorting);
+      }
+    },
+
     // initializeColumns() {
     //   // take care of default sort on mount
     //   if (this.defaultSortBy) {
@@ -1529,6 +1535,7 @@ export default {
     'vgt-global-search': VgtGlobalSearch,
     'vgt-header-row': VgtHeaderRow,
     'vgt-table-header': VgtTableHeader,
+    'vgt-rows': VgtRows,
   },
 };
 </script>

@@ -22,7 +22,15 @@
     v-if="headerRow.mode !== 'span' && lineNumbers"></th>
   <th
     class="vgt-row-header"
-    v-if="headerRow.mode !== 'span' && selectable"></th>
+    v-if="headerRow.mode !== 'span' && selectable">
+    <span v-if="columnCollapsable(-1)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"
+      @click="columnCollapsable(-1) ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}"></span>
+    <input
+      type="checkbox"
+      @click.stop="onCheckboxClicked(headerRow, 0, $event)"
+      :checked="headerRow.vgtSelected"
+    />
+  </th>
   <th
     v-if="headerRow.mode !== 'span' && !column.hidden"
     v-for="(column, i) in columns"
@@ -77,6 +85,9 @@ export default {
     },
     fullColspan: {
       type: Number,
+    },
+    onCheckboxClicked: {
+      type: Function,
     },
   },
   data() {
