@@ -6,6 +6,7 @@
       enabled: true,
       selectOnCheckboxOnly: true,
       selectHeader: true,
+      selectAllByPage: false
     }"
     @on-select-all="onSelectAll"
     @on-search="onSelectAll"
