@@ -1,5 +1,5 @@
 {
-  "name": "vue-good-table",
+  "name": "vue-good-parent-table",
   "version": "2.19.1",
   "sideEffects": [
     "*.vue",
