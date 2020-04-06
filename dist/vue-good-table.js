@@ -8600,64 +8600,32 @@
     staticRenderFns: __vue_staticRenderFns__$4
   }, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, undefined, undefined);
 
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
+  function recursiveHasRowUnselected(row) {
+    return row.children.find(function (child) {
+      if (!child.vgtSelected) return true;
+      if (child.children) return recursiveHasRowUnselected(child);
+      return false;
+    });
+  }
+
+  function recursiveHasRowSelected(row) {
+    return row.children.find(function (child) {
+      if (child.vgtSelected) return true;
+      if (child.children) return recursiveHasRowSelected(child);
+      return false;
+    });
+  }
+
+  function recursiveSelect(rows, newValue, vueSetFunction) {
+    rows.forEach(function (row) {
+      vueSetFunction(row, "vgtSelected", newValue);
+      if (row.children) recursiveSelect(row.children, newValue, vueSetFunction);
+    });
+  }
+
   //
   var script$5 = {
-    name: 'VgtHeaderRow',
+    name: "VgtHeaderRow",
     props: {
       headerRow: {
         type: Object
@@ -8694,7 +8662,32 @@
     data: function data() {
       return {};
     },
-    computed: {},
+    watch: {
+      headerRow: {
+        deep: true,
+        handler: function handler() {
+          console.log(this.headerRow.name);
+          this.$set(this.headerRow, "vgtSelected", this.allSelected);
+          console.log(this.headerRow.vgtSelected);
+        }
+      }
+    },
+    computed: {
+      allSelected: function allSelected() {
+        if (this.headerRow.children) {
+          return !recursiveHasRowUnselected(this.headerRow);
+        } else {
+          return this.headerRow.vgtSelected;
+        }
+      },
+      almostAllSelected: function almostAllSelected() {
+        if (this.headerRow.children && !this.allSelected) {
+          return recursiveHasRowSelected(this.headerRow);
+        } else {
+          return false;
+        }
+      }
+    },
     methods: {
       columnCollapsable: function columnCollapsable(currentIndex) {
         if (this.collapsable === true) {
@@ -8702,6 +8695,19 @@
         }
 
         return currentIndex === this.collapsable;
+      },
+      selectRow: function selectRow(row, index, event) {
+        this.onCheckboxClicked(row, index, event);
+
+        if (this.headerRow.children) {
+          if (this.allSelected) {
+            recursiveSelect(this.headerRow.children, false, this.$set);
+          } else {
+            recursiveSelect(this.headerRow.children, true, this.$set);
+          }
+
+          this.headerRow.vgtSelected = this.allSelected;
+        }
       }
     },
     mounted: function mounted() {},
@@ -8732,7 +8738,7 @@
     }, [_vm.collapsable ? _c('span', {
       staticClass: "triangle",
       "class": {
-        'expand': _vm.headerRow.vgtIsExpanded
+        expand: _vm.headerRow.vgtIsExpanded
       }
     }) : _vm._e(), _vm._v(" "), _vm._t("table-header-row", [_vm.headerRow.html ? _c('span', {
       domProps: {
@@ -8747,7 +8753,7 @@
     }, [_vm.columnCollapsable(-1) ? _c('span', {
       staticClass: "triangle",
       "class": {
-        'expand': _vm.headerRow.vgtIsExpanded
+        expand: _vm.headerRow.vgtIsExpanded
       },
       on: {
         "click": function click($event) {
@@ -8759,12 +8765,13 @@
         "type": "checkbox"
       },
       domProps: {
-        "checked": _vm.headerRow.vgtSelected
+        "checked": _vm.allSelected,
+        "indeterminate": _vm.almostAllSelected
       },
       on: {
         "click": function click($event) {
           $event.stopPropagation();
-          return _vm.onCheckboxClicked(_vm.headerRow, 0, $event);
+          return _vm.selectRow(_vm.headerRow, 0, $event);
         }
       }
     })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
@@ -8780,7 +8787,7 @@
       }, [_vm.columnCollapsable(i) ? _c('span', {
         staticClass: "triangle",
         "class": {
-          'expand': _vm.headerRow.vgtIsExpanded
+          expand: _vm.headerRow.vgtIsExpanded
         }
       }) : _vm._e(), _vm._v(" "), _vm._t("table-header-row", [!column.html ? _c('span', [_vm._v("\n        " + _vm._s(_vm.collectFormatted(_vm.headerRow, column, true)) + "\n      ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
         domProps: {
@@ -8817,96 +8824,8 @@
   }, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, undefined, undefined);
 
   //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
   var script$6 = {
-    name: 'VgtRows',
+    name: "VgtRows",
     props: {
       headerRow: {},
       row: {},
@@ -8930,6 +8849,14 @@
       onCheckboxClicked: {},
       onCellClicked: {}
     },
+    watch: {
+      row: {
+        deep: true,
+        handler: function handler() {
+          this.$set(this.row, "vgtSelected", this.allSelected);
+        }
+      }
+    },
     methods: {
       columnCollapsable: function columnCollapsable(currentIndex) {
         if (this.groupOptions.collapsable === true) {
@@ -8940,11 +8867,38 @@
       },
       toggleExpand: function toggleExpand() {
         this.$set(this.row, "vgtIsExpanded", !this.row.vgtIsExpanded);
+      },
+      selectRow: function selectRow(row, index, event) {
+        this.onCheckboxClicked(row, index, event);
+
+        if (this.row.children) {
+          if (this.allSelected) {
+            recursiveSelect(this.row.children, false, this.$set);
+          } else {
+            recursiveSelect(this.row.children, true, this.$set);
+          }
+
+          this.row.vgtSelected = this.allSelected;
+        }
       }
     },
     computed: {
       hasChildren: function hasChildren() {
         return this.row.children && this.row.children.length;
+      },
+      allSelected: function allSelected() {
+        if (this.row.children) {
+          return !recursiveHasRowUnselected(this.row);
+        } else {
+          return this.row.vgtSelected;
+        }
+      },
+      almostAllSelected: function almostAllSelected() {
+        if (this.row.children && !this.allSelected) {
+          return recursiveHasRowSelected(this.row);
+        } else {
+          return false;
+        }
       }
     }
   };
@@ -8989,12 +8943,12 @@
       }
     }, [_vm.lineNumbers ? _c('th', {
       staticClass: "line-numbers"
-    }, [_vm._v("\n                        " + _vm._s(_vm.getCurrentIndex(_vm.index)) + "\n                    ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
+    }, [_vm._v("\n            " + _vm._s(_vm.getCurrentIndex(_vm.index)) + "\n          ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
       staticClass: "vgt-checkbox-col"
     }, [_vm.columnCollapsable(-1) && _vm.hasChildren ? _c('span', {
       staticClass: "triangle",
       "class": {
-        'expand': _vm.row.vgtIsExpanded
+        expand: _vm.row.vgtIsExpanded
       },
       on: {
         "click": function click($event) {
@@ -9006,11 +8960,12 @@
         "type": "checkbox"
       },
       domProps: {
-        "checked": _vm.row.vgtSelected
+        "checked": _vm.allSelected,
+        "indeterminate": _vm.almostAllSelected
       },
       on: {
         "click": function click($event) {
-          return _vm.onCheckboxClicked(_vm.row, _vm.index, $event);
+          return _vm.selectRow(_vm.row, _vm.index, $event);
         }
       }
     })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
@@ -9025,9 +8980,9 @@
       }, [_vm.columnCollapsable(i) && _vm.hasChildren ? _c('span', {
         staticClass: "triangle",
         "class": {
-          'expand': _vm.row.vgtIsExpanded
+          expand: _vm.row.vgtIsExpanded
         }
-      }) : _vm._e(), _vm._v(" "), _vm._t("table-row", [!column.html ? _c('span', [_vm._v("\n                            " + _vm._s(_vm.collectFormatted(_vm.row, column)) + "\n                        ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
+      }) : _vm._e(), _vm._v(" "), _vm._t("table-row", [!column.html ? _c('span', [_vm._v("\n                " + _vm._s(_vm.collectFormatted(_vm.row, column)) + "\n              ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
         domProps: {
           "innerHTML": _vm._s(_vm.collect(_vm.row, column.field))
         }
