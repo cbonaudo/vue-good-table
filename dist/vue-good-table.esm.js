@@ -8326,7 +8326,7 @@ var secondarySort = function (sortArray, column) {
 
 //
 var script$4 = {
-  name: 'VgtTableHeader',
+  name: "VgtTableHeader",
   props: {
     lineNumbers: {
       "default": false,
@@ -8408,14 +8408,14 @@ var script$4 = {
   computed: {},
   methods: {
     reset: function reset() {
-      this.$refs['filter-row'].reset(true);
+      this.$refs["filter-row"].reset(true);
     },
     toggleSelectAll: function toggleSelectAll() {
-      this.$emit('on-toggle-select-all');
+      this.$emit("on-toggle-select-all");
     },
     isSortableColumn: function isSortableColumn(column) {
       var sortable = column.sortable;
-      var isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
+      var isSortable = typeof sortable === "boolean" ? sortable : this.sortable;
       return isSortable;
     },
     sort: function sort(e, column) {
@@ -8428,31 +8428,31 @@ var script$4 = {
         this.sorts = primarySort(this.sorts, column);
       }
 
-      this.$emit('on-sort-change', this.sorts);
+      this.$emit("on-sort-change", this.sorts);
     },
     setInitialSort: function setInitialSort(sorts) {
       this.sorts = sorts;
-      this.$emit('on-sort-change', this.sorts);
+      this.$emit("on-sort-change", this.sorts);
     },
     getColumnSort: function getColumnSort(column) {
       for (var i = 0; i < this.sorts.length; i += 1) {
         if (this.sorts[i].field === column.field) {
-          return this.sorts[i].type || 'asc';
+          return this.sorts[i].type || "asc";
         }
       }
 
       return null;
     },
     getHeaderClasses: function getHeaderClasses(column, index) {
-      var classes = lodash_assign({}, this.getClasses(index, 'th'), {
+      var classes = lodash_assign({}, this.getClasses(index, "th"), {
         sortable: this.isSortableColumn(column),
-        'sorting sorting-desc': this.getColumnSort(column) === 'desc',
-        'sorting sorting-asc': this.getColumnSort(column) === 'asc'
+        "sorting sorting-desc": this.getColumnSort(column) === "desc",
+        "sorting sorting-asc": this.getColumnSort(column) === "asc"
       });
       return classes;
     },
     filterRows: function filterRows(columnFilters) {
-      this.$emit('filter-changed', columnFilters);
+      this.$emit("filter-changed", columnFilters);
     },
     getWidthStyle: function getWidthStyle(dom) {
       if (window && window.getComputedStyle && dom) {
@@ -8463,7 +8463,7 @@ var script$4 = {
       }
 
       return {
-        width: 'auto'
+        width: "auto"
       };
     },
     setColumnStyles: function setColumnStyles() {
@@ -8478,9 +8478,9 @@ var script$4 = {
           colStyles.push(this.getWidthStyle(cell));
         } else {
           colStyles.push({
-            minWidth: this.columns[i].width ? this.columns[i].width : 'auto',
-            maxWidth: this.columns[i].width ? this.columns[i].width : 'auto',
-            width: this.columns[i].width ? this.columns[i].width : 'auto'
+            minWidth: this.columns[i].width ? this.columns[i].width : "auto",
+            maxWidth: this.columns[i].width ? this.columns[i].width : "auto",
+            width: this.columns[i].width ? this.columns[i].width : "auto"
           });
         }
       }
@@ -8489,9 +8489,9 @@ var script$4 = {
     },
     getColumnStyle: function getColumnStyle(column, index) {
       var styleObject = {
-        minWidth: column.width ? column.width : 'auto',
-        maxWidth: column.width ? column.width : 'auto',
-        width: column.width ? column.width : 'auto'
+        minWidth: column.width ? column.width : "auto",
+        maxWidth: column.width ? column.width : "auto",
+        width: column.width ? column.width : "auto"
       }; //* if fixed header we need to get width from original table
 
       if (this.tableRef) {
@@ -8506,13 +8506,13 @@ var script$4 = {
     }
   },
   mounted: function mounted() {
-    window.addEventListener('resize', this.setColumnStyles);
+    window.addEventListener("resize", this.setColumnStyles);
   },
   beforeDestroy: function beforeDestroy() {
-    window.removeEventListener('resize', this.setColumnStyles);
+    window.removeEventListener("resize", this.setColumnStyles);
   },
   components: {
-    'vgt-filter-row': VgtFilterRow
+    "vgt-filter-row": VgtFilterRow
   }
 };
 
@@ -8533,7 +8533,8 @@ var __vue_render__$4 = function __vue_render__() {
     staticClass: "vgt-checkbox-col"
   }, [_c('input', {
     attrs: {
-      "type": "checkbox"
+      "type": "checkbox",
+      "aria-label": "toggle select all"
     },
     domProps: {
       "checked": _vm.allSelected,
@@ -8578,7 +8579,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-eb5a915e";
+var __vue_scope_id__$4 = "data-v-15a2ca0a";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
@@ -8756,7 +8757,8 @@ var __vue_render__$5 = function __vue_render__() {
     }
   }) : _vm._e(), _vm._v(" "), _c('input', {
     attrs: {
-      "type": "checkbox"
+      "type": "checkbox",
+      "aria-label": "toggle select " + _vm.headerRow.name
     },
     domProps: {
       "checked": _vm.allSelected,
@@ -8951,7 +8953,8 @@ var __vue_render__$6 = function __vue_render__() {
     }
   }) : _vm._e(), _vm._v(" "), _c('input', {
     attrs: {
-      "type": "checkbox"
+      "type": "checkbox",
+      "aria-label": "toggle select " + _vm.row.name
     },
     domProps: {
       "checked": _vm.allSelected,
