@@ -40,6 +40,7 @@
         type="checkbox"
         @click.stop="selectRow(headerRow, 0, $event)"
         :checked="allSelected"
+        :aria-label="`toggle select ${headerRow.name}`"
         :indeterminate.prop="almostAllSelected"
       />
     </th>
@@ -83,43 +84,43 @@
 import {
   recursiveHasRowUnselected,
   recursiveHasRowSelected,
-  recursiveSelect
+  recursiveSelect,
 } from "./utils/recursive";
 
 export default {
   name: "VgtHeaderRow",
   props: {
     headerRow: {
-      type: Object
+      type: Object,
     },
     columns: {
-      type: Array
+      type: Array,
     },
     lineNumbers: {
-      type: Boolean
+      type: Boolean,
     },
     selectable: {
-      type: Boolean
+      type: Boolean,
     },
     collapsable: {
       type: [Boolean, Number],
-      default: false
+      default: false,
     },
     collectFormatted: {
-      type: Function
+      type: Function,
     },
     formattedRow: {
-      type: Function
+      type: Function,
     },
     getClasses: {
-      type: Function
+      type: Function,
     },
     fullColspan: {
-      type: Number
+      type: Number,
     },
     onCheckboxClicked: {
-      type: Function
-    }
+      type: Function,
+    },
   },
   data() {
     return {};
@@ -131,8 +132,8 @@ export default {
         console.log(this.headerRow.name);
         this.$set(this.headerRow, "vgtSelected", this.allSelected);
         console.log(this.headerRow.vgtSelected);
-      }
-    }
+      },
+    },
   },
   computed: {
     allSelected() {
@@ -148,10 +149,10 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
   methods: {
-    columnCollapsable: function(currentIndex) {
+    columnCollapsable: function (currentIndex) {
       if (this.collapsable === true) {
         return currentIndex === 0;
       }
@@ -167,10 +168,10 @@ export default {
         }
         this.headerRow.vgtSelected = this.allSelected;
       }
-    }
+    },
   },
   mounted() {},
-  components: {}
+  components: {},
 };
 </script>
 

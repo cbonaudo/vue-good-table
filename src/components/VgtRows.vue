@@ -29,6 +29,7 @@
               <input
                 type="checkbox"
                 @click="selectRow(row, index, $event)"
+                :aria-label="`toggle select ${row.name}`"
                 :checked="allSelected"
                 :indeterminate.prop="almostAllSelected"
               />
@@ -101,7 +102,7 @@
 import {
   recursiveHasRowUnselected,
   recursiveHasRowSelected,
-  recursiveSelect
+  recursiveSelect,
 } from "./utils/recursive";
 
 export default {
@@ -127,18 +128,18 @@ export default {
     onRowClicked: {},
     onRowAuxClicked: {},
     onCheckboxClicked: {},
-    onCellClicked: {}
+    onCellClicked: {},
   },
   watch: {
     row: {
       deep: true,
       handler() {
         this.$set(this.row, "vgtSelected", this.allSelected);
-      }
-    }
+      },
+    },
   },
   methods: {
-    columnCollapsable: function(currentIndex) {
+    columnCollapsable: function (currentIndex) {
       if (this.groupOptions.collapsable === true) {
         return currentIndex === 0;
       }
@@ -158,7 +159,7 @@ export default {
         }
         this.row.vgtSelected = this.allSelected;
       }
-    }
+    },
   },
   computed: {
     hasChildren() {
@@ -177,7 +178,7 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
