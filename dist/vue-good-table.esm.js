@@ -8661,9 +8661,7 @@ var script$5 = {
     headerRow: {
       deep: true,
       handler: function handler() {
-        console.log(this.headerRow.name);
         this.$set(this.headerRow, "vgtSelected", this.allSelected);
-        console.log(this.headerRow.vgtSelected);
       }
     }
   },
@@ -8720,7 +8718,7 @@ var __vue_render__$5 = function __vue_render__() {
 
   var _c = _vm._self._c || _h;
 
-  return _c('tr', [_vm.headerRow.mode === 'span' ? _c('th', {
+  return _c('tr', [_vm.headerRow.mode === 'span' ? _c('td', {
     staticClass: "vgt-left-align vgt-row-header",
     attrs: {
       "colspan": _vm.fullColspan
@@ -8739,7 +8737,7 @@ var __vue_render__$5 = function __vue_render__() {
     domProps: {
       "innerHTML": _vm._s(_vm.headerRow.label)
     }
-  }) : _c('span', [_vm._v("\n        " + _vm._s(_vm.headerRow.label) + "\n      ")])], {
+  }) : _c('span', [_vm._v(_vm._s(_vm.headerRow.label))])], {
     "row": _vm.headerRow
   })], 2) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.lineNumbers ? _c('th', {
     staticClass: "vgt-row-header"
@@ -8771,7 +8769,7 @@ var __vue_render__$5 = function __vue_render__() {
       }
     }
   })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
-    return _vm.headerRow.mode !== 'span' && !column.hidden ? _c('th', {
+    return _vm.headerRow.mode !== 'span' && !column.hidden ? _c('td', {
       key: i,
       staticClass: "vgt-row-header",
       "class": _vm.getClasses(i, 'td'),
@@ -8785,7 +8783,7 @@ var __vue_render__$5 = function __vue_render__() {
       "class": {
         expand: _vm.headerRow.vgtIsExpanded
       }
-    }) : _vm._e(), _vm._v(" "), _vm._t("table-header-row", [!column.html ? _c('span', [_vm._v("\n        " + _vm._s(_vm.collectFormatted(_vm.headerRow, column, true)) + "\n      ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
+    }) : _vm._e(), _vm._v(" "), _vm._t("table-header-row", [!column.html ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(_vm.headerRow, column, true)))]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
       domProps: {
         "innerHTML": _vm._s(_vm.collectFormatted(_vm.headerRow, column, true))
       }
@@ -8939,7 +8937,7 @@ var __vue_render__$6 = function __vue_render__() {
     }
   }, [_vm.lineNumbers ? _c('th', {
     staticClass: "line-numbers"
-  }, [_vm._v("\n            " + _vm._s(_vm.getCurrentIndex(_vm.index)) + "\n          ")]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
+  }, [_vm._v(_vm._s(_vm.getCurrentIndex(_vm.index)))]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
     staticClass: "vgt-checkbox-col"
   }, [_vm.columnCollapsable(-1) && _vm.hasChildren ? _c('span', {
     staticClass: "triangle",
@@ -8979,7 +8977,7 @@ var __vue_render__$6 = function __vue_render__() {
       "class": {
         expand: _vm.row.vgtIsExpanded
       }
-    }) : _vm._e(), _vm._v(" "), _vm._t("table-row", [!column.html ? _c('span', [_vm._v("\n                " + _vm._s(_vm.collectFormatted(_vm.row, column)) + "\n              ")]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
+    }) : _vm._e(), _vm._v(" "), _vm._t("table-row", [!column.html ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(_vm.row, column)))]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
       domProps: {
         "innerHTML": _vm._s(_vm.collect(_vm.row, column.field))
       }

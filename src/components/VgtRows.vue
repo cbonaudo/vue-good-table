@@ -12,9 +12,7 @@
             @click="onRowClicked(row, index, $event)"
             @auxclick="onRowAuxClicked(row, index, $event)"
           >
-            <th v-if="lineNumbers" class="line-numbers">
-              {{ getCurrentIndex(index) }}
-            </th>
+            <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <th v-if="selectable" class="vgt-checkbox-col">
               <span
                 v-if="columnCollapsable(-1) && hasChildren"
@@ -57,11 +55,8 @@
                 :formattedRow="formattedRow(row)"
                 :index="index"
               >
-                <span v-if="!column.html">
-                  {{ collectFormatted(row, column) }}
-                </span>
-                <span v-if="column.html" v-html="collect(row, column.field)">
-                </span>
+                <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
+                <span v-if="column.html" v-html="collect(row, column.field)"></span>
               </slot>
             </td>
           </tr>
@@ -90,8 +85,7 @@
             :onRowAuxClicked="onRowAuxClicked"
             :onCheckboxClicked="onCheckboxClicked"
             :onCellClicked="onCellClicked"
-          >
-          </vgt-rows>
+          ></vgt-rows>
         </tbody>
       </table>
     </td>
@@ -102,7 +96,7 @@
 import {
   recursiveHasRowUnselected,
   recursiveHasRowSelected,
-  recursiveSelect,
+  recursiveSelect
 } from "./utils/recursive";
 
 export default {
@@ -128,18 +122,18 @@ export default {
     onRowClicked: {},
     onRowAuxClicked: {},
     onCheckboxClicked: {},
-    onCellClicked: {},
+    onCellClicked: {}
   },
   watch: {
     row: {
       deep: true,
       handler() {
         this.$set(this.row, "vgtSelected", this.allSelected);
-      },
-    },
+      }
+    }
   },
   methods: {
-    columnCollapsable: function (currentIndex) {
+    columnCollapsable: function(currentIndex) {
       if (this.groupOptions.collapsable === true) {
         return currentIndex === 0;
       }
@@ -159,7 +153,7 @@ export default {
         }
         this.row.vgtSelected = this.allSelected;
       }
-    },
+    }
   },
   computed: {
     hasChildren() {
@@ -178,7 +172,7 @@ export default {
       } else {
         return false;
       }
-    },
-  },
+    }
+  }
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <th
+    <td
       v-if="headerRow.mode === 'span'"
       class="vgt-left-align vgt-row-header"
       :colspan="fullColspan"
@@ -8,23 +8,14 @@
         collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}
       "
     >
-      <span
-        v-if="collapsable"
-        class="triangle"
-        :class="{ expand: headerRow.vgtIsExpanded }"
-      ></span>
+      <span v-if="collapsable" class="triangle" :class="{ expand: headerRow.vgtIsExpanded }"></span>
       <slot :row="headerRow" name="table-header-row">
-        <span v-if="headerRow.html" v-html="headerRow.label"> </span>
-        <span v-else>
-          {{ headerRow.label }}
-        </span>
+        <span v-if="headerRow.html" v-html="headerRow.label"></span>
+        <span v-else>{{ headerRow.label }}</span>
       </slot>
-    </th>
+    </td>
     <!-- if the mode is not span, we display every column -->
-    <th
-      class="vgt-row-header"
-      v-if="headerRow.mode !== 'span' && lineNumbers"
-    ></th>
+    <th class="vgt-row-header" v-if="headerRow.mode !== 'span' && lineNumbers"></th>
     <th class="vgt-row-header" v-if="headerRow.mode !== 'span' && selectable">
       <span
         v-if="columnCollapsable(-1)"
@@ -44,7 +35,7 @@
         :indeterminate.prop="almostAllSelected"
       />
     </th>
-    <th
+    <td
       v-if="headerRow.mode !== 'span' && !column.hidden"
       v-for="(column, i) in columns"
       :key="i"
@@ -67,16 +58,10 @@
         :formattedRow="formattedRow(headerRow, true)"
         name="table-header-row"
       >
-        <span v-if="!column.html">
-          {{ collectFormatted(headerRow, column, true) }}
-        </span>
-        <span
-          v-if="column.html"
-          v-html="collectFormatted(headerRow, column, true)"
-        >
-        </span>
+        <span v-if="!column.html">{{ collectFormatted(headerRow, column, true) }}</span>
+        <span v-if="column.html" v-html="collectFormatted(headerRow, column, true)"></span>
       </slot>
-    </th>
+    </td>
   </tr>
 </template>
 
@@ -84,43 +69,43 @@
 import {
   recursiveHasRowUnselected,
   recursiveHasRowSelected,
-  recursiveSelect,
+  recursiveSelect
 } from "./utils/recursive";
 
 export default {
   name: "VgtHeaderRow",
   props: {
     headerRow: {
-      type: Object,
+      type: Object
     },
     columns: {
-      type: Array,
+      type: Array
     },
     lineNumbers: {
-      type: Boolean,
+      type: Boolean
     },
     selectable: {
-      type: Boolean,
+      type: Boolean
     },
     collapsable: {
       type: [Boolean, Number],
-      default: false,
+      default: false
     },
     collectFormatted: {
-      type: Function,
+      type: Function
     },
     formattedRow: {
-      type: Function,
+      type: Function
     },
     getClasses: {
-      type: Function,
+      type: Function
     },
     fullColspan: {
-      type: Number,
+      type: Number
     },
     onCheckboxClicked: {
-      type: Function,
-    },
+      type: Function
+    }
   },
   data() {
     return {};
@@ -129,11 +114,9 @@ export default {
     headerRow: {
       deep: true,
       handler() {
-        console.log(this.headerRow.name);
         this.$set(this.headerRow, "vgtSelected", this.allSelected);
-        console.log(this.headerRow.vgtSelected);
-      },
-    },
+      }
+    }
   },
   computed: {
     allSelected() {
@@ -149,10 +132,10 @@ export default {
       } else {
         return false;
       }
-    },
+    }
   },
   methods: {
-    columnCollapsable: function (currentIndex) {
+    columnCollapsable: function(currentIndex) {
       if (this.collapsable === true) {
         return currentIndex === 0;
       }
@@ -168,10 +151,10 @@ export default {
         }
         this.headerRow.vgtSelected = this.allSelected;
       }
-    },
+    }
   },
   mounted() {},
-  components: {},
+  components: {}
 };
 </script>
 
