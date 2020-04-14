@@ -129,6 +129,242 @@ components: {
 
 Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
 
+# Vue Good Table
+
+[[toc]]
+
+## Introduction
+
+For the needs of the application, a fork of a public npm package (vue-good-table) has been modified. The main modification need was to handle a nested table, that could handle rows with children, which had themselves possibly children.
+
+A lot of informations can be found on the library's website : xaksis.github.io/vue-good-table
+
+Ajouté dans le comet design system : OrganismNestedTable
+
+## Parameters Needed
+
+The library expects 2 main parameters :
+
+- columns : an array of object, containing the description of the columns displayed ("label", the name displayed, "field", the name of the column, "type": the type of the column)
+
+```js
+columns: [
+  {
+    label: 'Name',
+    field: 'name',
+  },
+  {
+    label: 'Diet',
+    field: 'diet',
+    type: 'text',
+  },
+  {
+    label: 'Count',
+    field: 'count',
+    type: 'number',
+  },
+],
+```
+
+- rows : an array of object, containing the data displayed, with fields corresponding to the columns we have provided. If we need a row to have a child row, this child needs to be defined in the "children" field. All subsequent children must also be defined in the "children" field of their respective parent.
+
+```js
+rows: [
+  {
+    name: 'Animals',
+    diet: 'omnivore',
+    count: '100',
+    children: [
+      {
+        name: 'Reptiles',
+        diet: 'carnivore',
+        count: 40,
+        children: [
+          { name: 'lizard', diet: 'insectivore', count: 34 },
+          { name: 'crocodile', diet: 'carnivore', count: 22 },
+          { name: 'turtles', diet: 'herbivore', count: 29 },
+        ],
+      },
+      {
+        name: 'Mamals',
+        diet: 'omnivore',
+        count: 40,
+        children: [
+          { name: 'Elephant', diet: 'herbivore', count: 5 },
+          { name: 'Cat', diet: 'carnivore', count: 28 },
+          { name: 'Dog', diet: 'omnivore', count: 12 },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Exotic Fruts',
+    diet: 'Bacteries',
+    count: '100',
+    children: [
+      {
+        name: 'Asian',
+        diet: '',
+        count: 10,
+        children: [{ name: 'AppleSina', diet: 'insectivore', count: 34 }],
+      },
+      {
+        name: 'African',
+        diet: '',
+        count: 20,
+        children: [
+          { name: 'Plantain', diet: 'insectivore', count: 34 },
+          { name: 'Kumquat', diet: 'carnivore', count: 22 },
+          { name: 'Kiwi', diet: 'herbivore', count: 29 },
+        ],
+      },
+      {
+        name: 'American',
+        diet: 'carnivore',
+        count: 40,
+        children: [
+          { name: 'Watermelon', diet: 'insectivore', count: 34 },
+          { name: 'Melon', diet: 'carnivore', count: 22 },
+          { name: 'Apples', diet: 'herbivore', count: 29 },
+        ],
+      },
+    ],
+  },
+],
+```
+
+Some parameters are used to manipulate the table :
+
+- style-class : Allows to pass a class for the rows (String)
+- mode : Allow the sorting and searching to be powered by server side instead of client side ("remote" if yes)
+
+```js
+:styleClass: "rowClass"
+mode: "remote"
+```
+
+SearchOptions :
+
+- enabled : Display a search input for the whole table (boolean)
+- searchFn : Specify our own search function (Function)
+- placeholder : Specify a placeholder for the input (String)
+- externalQuery : Specify our own input for the table search (String)
+
+```js
+:search-options="{
+  enabled: true,
+  searchFn: searchFunction,
+  placeholder: "Search the table...",
+  externalQuery: searchString,
+}"
+```
+
+SortOptions :
+
+- enabled : Enable sorting (boolean)
+- initialSortBy : Specify a default sort type (array of object (or single object), with "field", defining the column, and "type", defining asc or desc)
+- depth-level : Define which level of depth will be sorted (0 for header rows, 1 for first child rows, etc... 1 by default)
+
+```js
+:sort-options="{
+  enable: true,
+  initialSortBy: { field: "name", type: "asc" },
+  depthLevel: 0,
+}"
+```
+
+GroupOptions :
+
+- enabled : Allow to have parent rows for the table (boolean, needed for the nested table)
+- collapsable : Allows to control in which column the "expand" arrow is located (if the row has children), "-1" put the arrow in the checkbox column, "true" put the arrow in the first "data" column, all number from "1" and more put the arrow in the related data column.
+
+```js
+:group-options="{
+  enabled: true,
+  headerPosition: 'top',
+  collapsable: collapsable,
+}"
+```
+
+SelectOptions :
+
+- enabled : Allow to have checkboxes displayed in a column, to select rows (boolean).
+- selectOnCheckboxOnly : Determine if the whole row can be clicked to select it (boolean).
+- selectHeader : Determine if the header can be selected (boolean).
+
+```js
+:select-options="{
+  enabled: true,
+  selectOnCheckboxOnly: true,
+  selectHeader: true,
+}"
+```
+
+## Events
+
+A few events are defined to help us manipulate the data externaly to the library.
+
+- @on-sort-change : emitted when the sort is activated for a column
+
+```js
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-sort-change="onSortChange">
+```
+
+```js
+methods: {
+  onSortChange(params) {
+    // params[0].sortType - ascending or descending
+    // params[0].columnIndex - index of column being sorted
+  }
+}
+```
+
+- @on-select-all : emitted when the selectAll checkbox is selected
+
+```js
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :select-options="{ enabled: true }"
+  @on-select-all="onSelectAll">
+```
+
+```js
+methods: {
+  onSelectAll(params) {
+    // params.selected - whether the select-all checkbox is checked or unchecked
+    // params.selectedRows - all rows that are selected
+  }
+}
+```
+
+- @on-selected-rows-change : emitted when the selection is changed
+
+```js
+<vue-good-table
+ :columns="columns"
+ :rows="rows"
+ :select-options="{ enabled: true }"
+ @on-selected-rows-change="selectionChanged">
+```
+
+```js
+methods: {
+  selectionChanged(params) {
+    // params.selectedRows - all rows that are selected
+  }
+}
+```
+
+## Slots
+
+- table-header-row : Allow to redefine the content of a cell (row[column])
+- table-row : Same but for the child rows
+- empty-state : Define what is displayed when the table is empty
+
 <!--
 ### Example Usage
 ```html
