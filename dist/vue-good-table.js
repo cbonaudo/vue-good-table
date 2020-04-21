@@ -8759,7 +8759,7 @@
           _vm.columnCollapsable(-1) ? _vm.$emit('vgtExpand', !_vm.headerRow.vgtIsExpanded) : function () {};
         }
       }
-    }) : _vm._e(), _vm._v(" "), _c('input', {
+    }) : _vm._e(), _vm._v(" "), _vm._t("header-checkbox", [_c('input', {
       attrs: {
         "type": "checkbox",
         "aria-label": "toggle select " + _vm.headerRow.name
@@ -8774,7 +8774,11 @@
           return _vm.selectRow(_vm.headerRow, 0, $event);
         }
       }
-    })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+    })], {
+      "selectRow": _vm.selectRow,
+      "headerRow": _vm.headerRow,
+      "index": 0
+    })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
       return _vm.headerRow.mode !== 'span' && !column.hidden ? _c('td', {
         key: i,
         staticClass: "vgt-row-header",
@@ -8823,10 +8827,13 @@
     staticRenderFns: __vue_staticRenderFns__$5
   }, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, undefined, undefined);
 
-  //
   var script$6 = {
     name: "VgtRows",
     props: {
+      depth: {
+        type: Number,
+        "default": 1
+      },
       headerRow: {},
       row: {},
       index: {},
@@ -8883,6 +8890,9 @@
       }
     },
     computed: {
+      getRowClass: function getRowClass() {
+        return [].concat(_toConsumableArray(this.getRowStyleClass(this.row)), ["depth-".concat(this.depth)]);
+      },
       hasChildren: function hasChildren() {
         return this.row.children && this.row.children.length;
       },
@@ -8899,6 +8909,9 @@
         } else {
           return false;
         }
+      },
+      increaseDepth: function increaseDepth() {
+        return this.depth + 1;
       }
     }
   };
@@ -8923,7 +8936,7 @@
       "class": _vm.tableStyleClasses
     }, [_c('tbody', [_c('tr', {
       key: _vm.row.originalIndex,
-      "class": _vm.getRowStyleClass(_vm.row),
+      "class": _vm.getRowClass,
       on: {
         "mouseenter": function mouseenter($event) {
           return _vm.onMouseenter(_vm.row, _vm.index);
@@ -8955,7 +8968,7 @@
           _vm.columnCollapsable(-1) ? _vm.toggleExpand() : _vm.onCellClicked(_vm.row, _vm.column, _vm.index, $event);
         }
       }
-    }) : _vm._e(), _vm._v(" "), _c('input', {
+    }) : _vm._e(), _vm._v(" "), _vm._t("checkbox", [_c('input', {
       attrs: {
         "type": "checkbox",
         "aria-label": "toggle select " + _vm.row.name
@@ -8969,7 +8982,11 @@
           return _vm.selectRow(_vm.row, _vm.index, $event);
         }
       }
-    })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
+    })], {
+      "selectRow": _vm.selectRow,
+      "row": _vm.row,
+      "index": _vm.index
+    })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
       return !column.hidden && column.field ? _c('td', {
         key: i,
         "class": _vm.getClasses(i, 'td', _vm.row),
@@ -8983,11 +9000,7 @@
         "class": {
           expand: _vm.row.vgtIsExpanded
         }
-      }) : _vm._e(), _vm._v(" "), _vm._t("table-row", [!column.html ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(_vm.row, column)))]) : _vm._e(), _vm._v(" "), column.html ? _c('span', {
-        domProps: {
-          "innerHTML": _vm._s(_vm.collect(_vm.row, column.field))
-        }
-      }) : _vm._e()], {
+      }) : _vm._e(), _vm._v(" "), _vm._t("table-row", null, {
         "row": _vm.row,
         "column": column,
         "formattedRow": _vm.formattedRow(_vm.row),
@@ -9017,8 +9030,32 @@
           "onRowClicked": _vm.onRowClicked,
           "onRowAuxClicked": _vm.onRowAuxClicked,
           "onCheckboxClicked": _vm.onCheckboxClicked,
-          "onCellClicked": _vm.onCellClicked
-        }
+          "onCellClicked": _vm.onCellClicked,
+          "depth": _vm.increaseDepth
+        },
+        scopedSlots: _vm._u([{
+          key: "table-row",
+          fn: function fn(props) {
+            return [_vm._t("table-row", [!props.column.html ? _c('span', [_vm._v(_vm._s(_vm.collectFormatted(props.row, props.column)))]) : _vm._e(), _vm._v(" "), props.column.html ? _c('span', {
+              domProps: {
+                "innerHTML": _vm._s(_vm.collect(props.row, _vm.column.field))
+              }
+            }) : _vm._e()], {
+              "row": props.row,
+              "column": props.column,
+              "formattedRow": _vm.formattedRow(props.row),
+              "index": props.index
+            })];
+          }
+        }, {
+          key: "checkbox",
+          fn: function fn(props) {
+            return [_vm._t("checkbox", null, {
+              "selectRow": props.selectRow,
+              "row": props.row
+            })];
+          }
+        }], null, true)
       }) : _vm._e();
     })], 2)])])]) : _vm._e();
   };
@@ -15130,6 +15167,15 @@
               "row": props.row
             })] : undefined;
           }
+        }, {
+          key: "header-checkbox",
+          fn: function fn(props) {
+            return [_vm._t("checkbox", null, {
+              "selectRow": props.selectRow,
+              "row": props.headerRow,
+              "index": props.index
+            })];
+          }
         }], null, true)
       }) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index) {
         return headerRow.children && headerRow.children.length ? _c('vgt-rows', {
@@ -15168,6 +15214,15 @@
                 "row": props.row,
                 "column": props.column,
                 "formattedRow": _vm.formattedRow(props.row),
+                "index": props.index
+              })];
+            }
+          }, {
+            key: "checkbox",
+            fn: function fn(props) {
+              return [_vm._t("checkbox", null, {
+                "selectRow": props.selectRow,
+                "row": props.row,
                 "index": props.index
               })];
             }
