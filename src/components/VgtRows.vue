@@ -54,10 +54,7 @@
                 :column="column"
                 :formattedRow="formattedRow(row)"
                 :index="index"
-              >
-                <span v-if="!column.html">{{ collectFormatted(row, column) }}</span>
-                <span v-if="column.html" v-html="collect(row, column.field)"></span>
-              </slot>
+              ></slot>
             </td>
           </tr>
           <vgt-rows
@@ -85,7 +82,20 @@
             :onRowAuxClicked="onRowAuxClicked"
             :onCheckboxClicked="onCheckboxClicked"
             :onCellClicked="onCellClicked"
-          ></vgt-rows>
+          >
+          <template slot="table-row" slot-scope="props">
+                <slot
+                  name="table-row"
+                  :row="props.row"
+                  :column="props.column"
+                  :formattedRow="formattedRow(props.row)"
+                  :index="props.index"
+                >
+                  <span v-if="!props.column.html">{{ collectFormatted(props.row, props.column) }}</span>
+                  <span v-if="props.column.html" v-html="collect(props.row, column.field)"></span>
+                </slot>
+              </template>
+          </vgt-rows>
         </tbody>
       </table>
     </td>
