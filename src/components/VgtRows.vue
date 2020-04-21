@@ -5,7 +5,7 @@
         <tbody>
           <tr
             :key="row.originalIndex"
-            :class="getRowStyleClass(row)"
+            :class="getRowClass"
             @mouseenter="onMouseenter(row, index)"
             @mouseleave="onMouseleave(row, index)"
             @dblclick="onRowDoubleClicked(row, index, $event)"
@@ -82,6 +82,7 @@
             :onRowAuxClicked="onRowAuxClicked"
             :onCheckboxClicked="onCheckboxClicked"
             :onCellClicked="onCellClicked"
+            :depth="increaseDepth"
           >
           <template slot="table-row" slot-scope="props">
                 <slot
@@ -112,6 +113,7 @@ import {
 export default {
   name: "VgtRows",
   props: {
+    depth: { type: Number, default: 1},
     headerRow: {},
     row: {},
     index: {},
@@ -166,6 +168,9 @@ export default {
     }
   },
   computed: {
+    getRowClass() {
+      return [...this.getRowStyleClass(this.row), `depth-${this.depth}`]
+    },
     hasChildren() {
       return this.row.children && this.row.children.length;
     },
@@ -182,6 +187,9 @@ export default {
       } else {
         return false;
       }
+    },
+    increaseDepth() {
+      return this.depth + 1;
     }
   }
 };
