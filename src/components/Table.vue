@@ -135,6 +135,10 @@
                   :row="props.row"
                 ></slot>
               </template>
+              <template #header-checkbox="props">
+                <slot name="checkbox" :selectRow="props.selectRow" :row="props.headerRow" :index="props.index">
+                </slot>
+              </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
             <vgt-rows
@@ -173,6 +177,10 @@
                 >
                   <span v-if="!props.column.html">{{ collectFormatted(props.row, props.column) }}</span>
                   <span v-if="props.column.html" v-html="collect(props.row, column.field)"></span>
+                </slot>
+              </template>
+              <template #checkbox="props">
+                <slot name="checkbox" :selectRow="props.selectRow" :row="props.row" :index="props.index">
                 </slot>
               </template>
             </vgt-rows>

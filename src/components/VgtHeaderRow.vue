@@ -27,13 +27,15 @@
             : () => {}
         "
       ></span>
-      <input
-        type="checkbox"
-        @click.stop="selectRow(headerRow, 0, $event)"
-        :checked="allSelected"
-        :aria-label="`toggle select ${headerRow.name}`"
-        :indeterminate.prop="almostAllSelected"
-      />
+      <slot name="header-checkbox" :selectRow="selectRow" :headerRow="headerRow" :index="0">
+        <input
+          type="checkbox"
+          @click.stop="selectRow(headerRow, 0, $event)"
+          :checked="allSelected"
+          :aria-label="`toggle select ${headerRow.name}`"
+          :indeterminate.prop="almostAllSelected"
+        />
+      </slot>
     </th>
     <td
       v-if="headerRow.mode !== 'span' && !column.hidden"

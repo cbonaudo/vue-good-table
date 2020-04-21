@@ -24,13 +24,15 @@
                     : onCellClicked(row, column, index, $event)
                 "
               ></span>
-              <input
-                type="checkbox"
-                @click="selectRow(row, index, $event)"
-                :aria-label="`toggle select ${row.name}`"
-                :checked="allSelected"
-                :indeterminate.prop="almostAllSelected"
-              />
+              <slot name="checkbox" :selectRow="selectRow" :row="row" :index="index">
+                <input
+                  type="checkbox"
+                  @click="selectRow(row, index, $event)"
+                  :aria-label="`toggle select ${row.name}`"
+                  :checked="allSelected"
+                  :indeterminate.prop="almostAllSelected"
+                  />
+              </slot>
             </th>
             <td
               v-for="(column, i) in columns"
@@ -84,18 +86,22 @@
             :onCellClicked="onCellClicked"
             :depth="increaseDepth"
           >
-          <template slot="table-row" slot-scope="props">
-                <slot
-                  name="table-row"
-                  :row="props.row"
-                  :column="props.column"
-                  :formattedRow="formattedRow(props.row)"
-                  :index="props.index"
-                >
-                  <span v-if="!props.column.html">{{ collectFormatted(props.row, props.column) }}</span>
-                  <span v-if="props.column.html" v-html="collect(props.row, column.field)"></span>
-                </slot>
-              </template>
+            <template #table-row="props">
+              <slot
+                name="table-row"
+                :row="props.row"
+                :column="props.column"
+                :formattedRow="formattedRow(props.row)"
+                :index="props.index"
+              >
+                <span v-if="!props.column.html">{{ collectFormatted(props.row, props.column) }}</span>
+                <span v-if="props.column.html" v-html="collect(props.row, column.field)"></span>
+              </slot>
+            </template>
+            <template #checkbox="props">
+              <slot name="checkbox" :selectRow="props.selectRow" :row="props.row">
+              </slot>
+            </template>
           </vgt-rows>
         </tbody>
       </table>
