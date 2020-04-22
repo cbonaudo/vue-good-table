@@ -27,7 +27,14 @@
             : () => {}
         "
       ></span>
-      <slot name="header-checkbox" :selectRow="selectRow" :headerRow="headerRow" :index="0">
+      <slot
+        name="header-checkbox"
+        :selectRow="selectRow"
+        :headerRow="headerRow"
+        :index="0"
+        :allSelected="allSelected"
+        :almostAllSelected="almostAllSelected"
+      >
         <input
           type="checkbox"
           @click.stop="selectRow(headerRow, 0, $event)"

@@ -24,14 +24,21 @@
                     : onCellClicked(row, column, index, $event)
                 "
               ></span>
-              <slot name="checkbox" :selectRow="selectRow" :row="row" :index="index">
+              <slot
+                name="checkbox"
+                :selectRow="selectRow"
+                :row="row" 
+                :index="index"
+                :allSelected="allSelected"
+                :almostAllSelected="almostAllSelected"
+              >
                 <input
                   type="checkbox"
                   @click="selectRow(row, index, $event)"
                   :aria-label="`toggle select ${row.name}`"
                   :checked="allSelected"
                   :indeterminate.prop="almostAllSelected"
-                  />
+                />
               </slot>
             </th>
             <td

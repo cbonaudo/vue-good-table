@@ -136,7 +136,14 @@
                 ></slot>
               </template>
               <template #header-checkbox="props">
-                <slot name="checkbox" :selectRow="props.selectRow" :row="props.headerRow" :index="props.index">
+                <slot
+                  name="checkbox"
+                  :selectRow="props.selectRow"
+                  :row="props.headerRow"
+                  :index="props.index"
+                  :allSelected="allSelected"
+                  :almostAllSelected="almostAllSelected"
+                >
                 </slot>
               </template>
             </vgt-header-row>
@@ -180,7 +187,14 @@
                 </slot>
               </template>
               <template #checkbox="props">
-                <slot name="checkbox" :selectRow="props.selectRow" :row="props.row" :index="props.index">
+                <slot
+                  name="checkbox"
+                  :selectRow="props.selectRow"
+                  :row="props.row"
+                  :index="props.index"
+                  :allSelected="allSelected"
+                  :almostAllSelected="almostAllSelected"
+                >
                 </slot>
               </template>
             </vgt-rows>
