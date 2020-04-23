@@ -3,13 +3,20 @@
     <tr>
       <th v-if="lineNumbers" class="line-numbers"></th>
       <th v-if="selectable" class="vgt-checkbox-col">
-        <input
-          type="checkbox"
-          :checked="allSelected"
-          :indeterminate.prop="allSelectedIndeterminate"
-          aria-label="toggle select all"
-          @change="toggleSelectAll"
-        />
+        <slot
+          name="header-checkbox-all"
+          :allSelected="allSelected"
+          :allSelectedIndeterminate="allSelectedIndeterminate"
+          :toggleSelectAll="toggleSelectAll"
+        >
+          <input
+            type="checkbox"
+            :checked="allSelected"
+            :indeterminate.prop="allSelectedIndeterminate"
+            aria-label="toggle select all"
+            @change="toggleSelectAll"
+          />
+        </slot>
       </th>
       <th
         v-for="(column, index) in columns"

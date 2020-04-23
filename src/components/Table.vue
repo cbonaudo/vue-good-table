@@ -141,8 +141,8 @@
                   :selectRow="props.selectRow"
                   :row="props.headerRow"
                   :index="props.index"
-                  :allSelected="allSelected"
-                  :almostAllSelected="almostAllSelected"
+                  :allSelected="props.allSelected"
+                  :almostAllSelected="props.almostAllSelected"
                 >
                 </slot>
               </template>
@@ -192,8 +192,8 @@
                   :selectRow="props.selectRow"
                   :row="props.row"
                   :index="props.index"
-                  :allSelected="allSelected"
-                  :almostAllSelected="almostAllSelected"
+                  :allSelected="props.allSelected"
+                  :almostAllSelected="props.almostAllSelected"
                 >
                 </slot>
               </template>

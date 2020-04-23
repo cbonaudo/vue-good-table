@@ -2,10 +2,10 @@
   <tr v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true">
     <td :colspan="fullColspan" class="table-container">
       <table :class="tableStyleClasses">
-        <tbody>
+        <tbody :class="`depth-${this.depth}`">
           <tr
             :key="row.originalIndex"
-            :class="getRowClass"
+            :class="getRowStyleClass(row)"
             @mouseenter="onMouseenter(row, index)"
             @mouseleave="onMouseleave(row, index)"
             @dblclick="onRowDoubleClicked(row, index, $event)"
@@ -14,16 +14,6 @@
           >
             <th v-if="lineNumbers" class="line-numbers">{{ getCurrentIndex(index) }}</th>
             <th v-if="selectable" class="vgt-checkbox-col">
-              <span
-                v-if="columnCollapsable(-1) && hasChildren"
-                class="triangle"
-                :class="{ expand: row.vgtIsExpanded }"
-                @click="
-                  columnCollapsable(-1)
-                    ? toggleExpand()
-                    : onCellClicked(row, column, index, $event)
-                "
-              ></span>
               <slot
                 name="checkbox"
                 :selectRow="selectRow"
@@ -31,7 +21,23 @@
                 :index="index"
                 :allSelected="allSelected"
                 :almostAllSelected="almostAllSelected"
+                :displayArrow="columnCollapsable(-1) && hasChildren"
+                :isExpanded="row.vgtIsExpanded"
+                :expand="columnCollapsable(-1)
+                      ? toggleExpand()
+                      : onCellClicked(row, column, index, $event)"
               >
+                <span
+                  v-if="columnCollapsable(-1) && hasChildren"
+                  class="triangle"
+                  :class="{ expand: row.vgtIsExpanded }"
+                  @click="
+                    columnCollapsable(-1)
+                      ? toggleExpand()
+                      : onCellClicked(row, column, index, $event)
+                  "
+                ></span>
+
                 <input
                   type="checkbox"
                   @click="selectRow(row, index, $event)"
@@ -181,9 +187,6 @@ export default {
     }
   },
   computed: {
-    getRowClass() {
-      return [...this.getRowStyleClass(this.row), `depth-${this.depth}`]
-    },
     hasChildren() {
       return this.row.children && this.row.children.length;
     },
