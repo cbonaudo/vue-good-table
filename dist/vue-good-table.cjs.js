@@ -8587,7 +8587,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-758cb956";
+var __vue_scope_id__$4 = "data-v-501e4356";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
@@ -15112,6 +15112,11 @@ var __vue_render__$7 = function __vue_render__() {
           "column": props.column
         })];
       }
+    }, {
+      key: "header-checkbox-all",
+      fn: function fn(props) {
+        return [_vm._t("header-checkbox-all", null, null, props)];
+      }
     }], null, true)
   })], 1) : _vm._e()]), _vm._v(" "), _c('div', {
     "class": {
@@ -15148,6 +15153,11 @@ var __vue_render__$7 = function __vue_render__() {
           "column": props.column
         })];
       }
+    }, {
+      key: "header-checkbox-all",
+      fn: function fn(props) {
+        return [_vm._t("header-checkbox-all", null, null, props)];
+      }
     }], null, true)
   }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index) {
     return _c('tbody', {
@@ -15182,13 +15192,7 @@ var __vue_render__$7 = function __vue_render__() {
       }, {
         key: "header-checkbox",
         fn: function fn(props) {
-          return [_vm._t("checkbox", null, {
-            "selectRow": props.selectRow,
-            "row": props.headerRow,
-            "index": props.index,
-            "allSelected": props.allSelected,
-            "almostAllSelected": props.almostAllSelected
-          })];
+          return [_vm._t("checkbox", null, null, props)];
         }
       }], null, true)
     }) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index) {
@@ -15234,13 +15238,7 @@ var __vue_render__$7 = function __vue_render__() {
         }, {
           key: "checkbox",
           fn: function fn(props) {
-            return [_vm._t("checkbox", null, {
-              "selectRow": props.selectRow,
-              "row": props.row,
-              "index": props.index,
-              "allSelected": props.allSelected,
-              "almostAllSelected": props.almostAllSelected
-            })];
+            return [_vm._t("checkbox", null, null, props)];
           }
         }], null, true)
       }) : _vm._e();

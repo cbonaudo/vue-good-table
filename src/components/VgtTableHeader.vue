@@ -9,7 +9,7 @@
           :allSelectedIndeterminate="allSelectedIndeterminate"
           :toggleSelectAll="toggleSelectAll"
         >
-          <input
+        <input
             type="checkbox"
             :checked="allSelected"
             :indeterminate.prop="allSelectedIndeterminate"

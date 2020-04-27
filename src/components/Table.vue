@@ -80,6 +80,13 @@
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
+
+            <template slot="header-checkbox-all" slot-scope="props">
+              <slot
+                name="header-checkbox-all"
+                v-bind="props"
+              />
+            </template>
           </thead>
         </table>
       </div>
@@ -107,6 +114,13 @@
               <slot name="table-column" :column="props.column">
                 <span>{{props.column.label}}</span>
               </slot>
+            </template>
+
+            <template slot="header-checkbox-all" slot-scope="props">
+              <slot
+                name="header-checkbox-all"
+                v-bind="props"
+              />
             </template>
           </thead>
 
@@ -138,11 +152,7 @@
               <template #header-checkbox="props">
                 <slot
                   name="checkbox"
-                  :selectRow="props.selectRow"
-                  :row="props.headerRow"
-                  :index="props.index"
-                  :allSelected="props.allSelected"
-                  :almostAllSelected="props.almostAllSelected"
+                  v-bind="props"
                 >
                 </slot>
               </template>
@@ -189,11 +199,7 @@
               <template #checkbox="props">
                 <slot
                   name="checkbox"
-                  :selectRow="props.selectRow"
-                  :row="props.row"
-                  :index="props.index"
-                  :allSelected="props.allSelected"
-                  :almostAllSelected="props.almostAllSelected"
+                  v-bind="props"
                 >
                 </slot>
               </template>
