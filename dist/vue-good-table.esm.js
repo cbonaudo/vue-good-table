@@ -8531,7 +8531,7 @@ var __vue_render__$4 = function __vue_render__() {
     staticClass: "line-numbers"
   }) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
     staticClass: "vgt-checkbox-col"
-  }, [_c('input', {
+  }, [_vm._t("header-checkbox-all", [_c('input', {
     attrs: {
       "type": "checkbox",
       "aria-label": "toggle select all"
@@ -8543,7 +8543,11 @@ var __vue_render__$4 = function __vue_render__() {
     on: {
       "change": _vm.toggleSelectAll
     }
-  })]) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
+  })], {
+    "allSelected": _vm.allSelected,
+    "allSelectedIndeterminate": _vm.allSelectedIndeterminate,
+    "toggleSelectAll": _vm.toggleSelectAll
+  })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, index) {
     return !column.hidden ? _c('th', {
       key: index,
       "class": _vm.getHeaderClasses(column, index),
@@ -8579,7 +8583,7 @@ var __vue_staticRenderFns__$4 = [];
 var __vue_inject_styles__$4 = undefined;
 /* scoped */
 
-var __vue_scope_id__$4 = "data-v-15a2ca0a";
+var __vue_scope_id__$4 = "data-v-501e4356";
 /* module identifier */
 
 var __vue_module_identifier__$4 = undefined;
@@ -8743,7 +8747,7 @@ var __vue_render__$5 = function __vue_render__() {
     staticClass: "vgt-row-header"
   }) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.selectable ? _c('th', {
     staticClass: "vgt-row-header"
-  }, [_vm.columnCollapsable(-1) ? _c('span', {
+  }, [_vm._t("header-checkbox", [_vm.columnCollapsable(-1) ? _c('span', {
     staticClass: "triangle",
     "class": {
       expand: _vm.headerRow.vgtIsExpanded
@@ -8753,7 +8757,7 @@ var __vue_render__$5 = function __vue_render__() {
         _vm.columnCollapsable(-1) ? _vm.$emit('vgtExpand', !_vm.headerRow.vgtIsExpanded) : function () {};
       }
     }
-  }) : _vm._e(), _vm._v(" "), _vm._t("header-checkbox", [_c('input', {
+  }) : _vm._e(), _vm._v(" "), _c('input', {
     attrs: {
       "type": "checkbox",
       "aria-label": "toggle select " + _vm.headerRow.name
@@ -8771,7 +8775,12 @@ var __vue_render__$5 = function __vue_render__() {
   })], {
     "selectRow": _vm.selectRow,
     "headerRow": _vm.headerRow,
-    "index": 0
+    "index": 0,
+    "allSelected": _vm.allSelected,
+    "almostAllSelected": _vm.almostAllSelected,
+    "displayArrow": _vm.columnCollapsable(-1),
+    "isExpanded": _vm.headerRow.vgtIsExpanded,
+    "expand": _vm.columnCollapsable(-1) ? _vm.$emit('vgtExpand', !_vm.headerRow.vgtIsExpanded) : function () {}
   })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
     return _vm.headerRow.mode !== 'span' && !column.hidden ? _c('td', {
       key: i,
@@ -8821,6 +8830,7 @@ var VgtHeaderRow = normalizeComponent_1({
   staticRenderFns: __vue_staticRenderFns__$5
 }, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, undefined, undefined);
 
+//
 var script$6 = {
   name: "VgtRows",
   props: {
@@ -8884,9 +8894,6 @@ var script$6 = {
     }
   },
   computed: {
-    getRowClass: function getRowClass() {
-      return [].concat(_toConsumableArray(this.getRowStyleClass(this.row)), ["depth-".concat(this.depth)]);
-    },
     hasChildren: function hasChildren() {
       return this.row.children && this.row.children.length;
     },
@@ -8928,9 +8935,11 @@ var __vue_render__$6 = function __vue_render__() {
     }
   }, [_c('table', {
     "class": _vm.tableStyleClasses
-  }, [_c('tbody', [_c('tr', {
+  }, [_c('tbody', {
+    "class": "depth-" + this.depth
+  }, [_c('tr', {
     key: _vm.row.originalIndex,
-    "class": _vm.getRowClass,
+    "class": _vm.getRowStyleClass(_vm.row),
     on: {
       "mouseenter": function mouseenter($event) {
         return _vm.onMouseenter(_vm.row, _vm.index);
@@ -8952,7 +8961,7 @@ var __vue_render__$6 = function __vue_render__() {
     staticClass: "line-numbers"
   }, [_vm._v(_vm._s(_vm.getCurrentIndex(_vm.index)))]) : _vm._e(), _vm._v(" "), _vm.selectable ? _c('th', {
     staticClass: "vgt-checkbox-col"
-  }, [_vm.columnCollapsable(-1) && _vm.hasChildren ? _c('span', {
+  }, [_vm._t("checkbox", [_vm.columnCollapsable(-1) && _vm.hasChildren ? _c('span', {
     staticClass: "triangle",
     "class": {
       expand: _vm.row.vgtIsExpanded
@@ -8962,7 +8971,7 @@ var __vue_render__$6 = function __vue_render__() {
         _vm.columnCollapsable(-1) ? _vm.toggleExpand() : _vm.onCellClicked(_vm.row, _vm.column, _vm.index, $event);
       }
     }
-  }) : _vm._e(), _vm._v(" "), _vm._t("checkbox", [_c('input', {
+  }) : _vm._e(), _vm._v(" "), _c('input', {
     attrs: {
       "type": "checkbox",
       "aria-label": "toggle select " + _vm.row.name
@@ -8979,7 +8988,12 @@ var __vue_render__$6 = function __vue_render__() {
   })], {
     "selectRow": _vm.selectRow,
     "row": _vm.row,
-    "index": _vm.index
+    "index": _vm.index,
+    "allSelected": _vm.allSelected,
+    "almostAllSelected": _vm.almostAllSelected,
+    "displayArrow": _vm.columnCollapsable(-1) && _vm.hasChildren,
+    "isExpanded": _vm.row.vgtIsExpanded,
+    "expand": _vm.columnCollapsable(-1) ? _vm.toggleExpand() : _vm.onCellClicked(_vm.row, _vm.column, _vm.index, _vm.$event)
   })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
     return !column.hidden && column.field ? _c('td', {
       key: i,
@@ -15094,6 +15108,11 @@ var __vue_render__$7 = function __vue_render__() {
           "column": props.column
         })];
       }
+    }, {
+      key: "header-checkbox-all",
+      fn: function fn(props) {
+        return [_vm._t("header-checkbox-all", null, null, props)];
+      }
     }], null, true)
   })], 1) : _vm._e()]), _vm._v(" "), _c('div', {
     "class": {
@@ -15130,6 +15149,11 @@ var __vue_render__$7 = function __vue_render__() {
           "column": props.column
         })];
       }
+    }, {
+      key: "header-checkbox-all",
+      fn: function fn(props) {
+        return [_vm._t("header-checkbox-all", null, null, props)];
+      }
     }], null, true)
   }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index) {
     return _c('tbody', {
@@ -15164,11 +15188,7 @@ var __vue_render__$7 = function __vue_render__() {
       }, {
         key: "header-checkbox",
         fn: function fn(props) {
-          return [_vm._t("checkbox", null, {
-            "selectRow": props.selectRow,
-            "row": props.headerRow,
-            "index": props.index
-          })];
+          return [_vm._t("checkbox", null, null, props)];
         }
       }], null, true)
     }) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index) {
@@ -15214,11 +15234,7 @@ var __vue_render__$7 = function __vue_render__() {
         }, {
           key: "checkbox",
           fn: function fn(props) {
-            return [_vm._t("checkbox", null, {
-              "selectRow": props.selectRow,
-              "row": props.row,
-              "index": props.index
-            })];
+            return [_vm._t("checkbox", null, null, props)];
           }
         }], null, true)
       }) : _vm._e();

@@ -17,17 +17,30 @@
     <!-- if the mode is not span, we display every column -->
     <th class="vgt-row-header" v-if="headerRow.mode !== 'span' && lineNumbers"></th>
     <th class="vgt-row-header" v-if="headerRow.mode !== 'span' && selectable">
-      <span
-        v-if="columnCollapsable(-1)"
-        class="triangle"
-        :class="{ expand: headerRow.vgtIsExpanded }"
-        @click="
-          columnCollapsable(-1)
-            ? $emit('vgtExpand', !headerRow.vgtIsExpanded)
-            : () => {}
-        "
-      ></span>
-      <slot name="header-checkbox" :selectRow="selectRow" :headerRow="headerRow" :index="0">
+      <slot
+        name="header-checkbox"
+        :selectRow="selectRow"
+        :headerRow="headerRow"
+        :index="0"
+        :allSelected="allSelected"
+        :almostAllSelected="almostAllSelected"
+        :displayArrow="columnCollapsable(-1)"
+        :isExpanded="headerRow.vgtIsExpanded"
+        :expand="columnCollapsable(-1)
+              ? $emit('vgtExpand', !headerRow.vgtIsExpanded)
+              : () => {}"
+      >
+        <span
+          v-if="columnCollapsable(-1)"
+          class="triangle"
+          :class="{ expand: headerRow.vgtIsExpanded }"
+          @click="
+            columnCollapsable(-1)
+              ? $emit('vgtExpand', !headerRow.vgtIsExpanded)
+              : () => {}
+          "
+        ></span>
+
         <input
           type="checkbox"
           @click.stop="selectRow(headerRow, 0, $event)"
