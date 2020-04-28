@@ -8786,7 +8786,9 @@
       "almostAllSelected": _vm.almostAllSelected,
       "displayArrow": _vm.columnCollapsable(-1),
       "isExpanded": _vm.headerRow.vgtIsExpanded,
-      "expand": _vm.columnCollapsable(-1) ? _vm.$emit('vgtExpand', !_vm.headerRow.vgtIsExpanded) : function () {}
+      "expand": function expand() {
+        return _vm.columnCollapsable(-1) && _vm.$emit('vgtExpand', !_vm.headerRow.vgtIsExpanded);
+      }
     })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
       return _vm.headerRow.mode !== 'span' && !column.hidden ? _c('td', {
         key: i,
@@ -8847,6 +8849,7 @@
       headerRow: {},
       row: {},
       index: {},
+      hasHeader: {},
       groupOptions: {},
       getRowStyleClass: {},
       lineNumbers: {},
@@ -8919,6 +8922,13 @@
       },
       increaseDepth: function increaseDepth() {
         return this.depth + 1;
+      },
+      isExpanded: function isExpanded() {
+        if (this.groupOptions.collapsable && !(this.depth === 1 && this.hasHeader === false)) {
+          return this.headerRow.vgtIsExpanded;
+        }
+
+        return true;
       }
     }
   };
@@ -8934,7 +8944,7 @@
 
     var _c = _vm._self._c || _h;
 
-    return (_vm.groupOptions.collapsable ? _vm.headerRow.vgtIsExpanded : true) ? _c('tr', [_c('td', {
+    return _vm.isExpanded ? _c('tr', [_c('td', {
       staticClass: "table-container",
       attrs: {
         "colspan": _vm.fullColspan
@@ -8999,7 +9009,9 @@
       "almostAllSelected": _vm.almostAllSelected,
       "displayArrow": _vm.columnCollapsable(-1) && _vm.hasChildren,
       "isExpanded": _vm.row.vgtIsExpanded,
-      "expand": _vm.columnCollapsable(-1) ? _vm.toggleExpand() : _vm.onCellClicked(_vm.row, _vm.column, _vm.index, _vm.$event)
+      "expand": function expand() {
+        return _vm.columnCollapsable(-1) ? _vm.toggleExpand() : _vm.onCellClicked(_vm.row, _vm.column, _vm.index, _vm.$event);
+      }
     })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
       return !column.hidden && column.field ? _c('td', {
         key: i,
@@ -9027,6 +9039,7 @@
           "index": childIndex,
           "headerRow": _vm.row,
           "row": childRow,
+          "hasHeader": _vm.hasHeader,
           "groupOptions": _vm.groupOptions,
           "getRowStyleClass": _vm.getRowStyleClass,
           "getClasses": _vm.getClasses,
@@ -13807,6 +13820,10 @@
         "default": false,
         type: Boolean
       },
+      hasHeader: {
+        "default": true,
+        type: Boolean
+      },
       theme: {
         "default": ""
       },
@@ -14299,6 +14316,17 @@
       }
     },
     methods: {
+      getRows: function getRows(headerRow) {
+        if (headerRow.children && headerRow.children.length) {
+          if (this.hasHeader) {
+            return headerRow.children;
+          }
+
+          return [headerRow];
+        }
+
+        return [];
+      },
       toggleExpand: function toggleExpand(index) {
         var headerRow = this.filteredRows[index];
 
@@ -15164,7 +15192,7 @@
     }), _vm._v(" "), _vm._l(_vm.paginated, function (headerRow, index) {
       return _c('tbody', {
         key: index
-      }, [_vm.groupHeaderOnTop ? _c('vgt-header-row', {
+      }, [_vm.groupHeaderOnTop && _vm.hasHeader ? _c('vgt-header-row', {
         attrs: {
           "header-row": headerRow,
           "columns": _vm.columns,
@@ -15197,13 +15225,14 @@
             return [_vm._t("checkbox", null, null, props)];
           }
         }], null, true)
-      }) : _vm._e(), _vm._v(" "), _vm._l(headerRow.children, function (row, index) {
-        return headerRow.children && headerRow.children.length ? _c('vgt-rows', {
+      }) : _vm._e(), _vm._v(" "), _vm._l(_vm.getRows(headerRow), function (row, index) {
+        return _c('vgt-rows', {
           key: index,
           attrs: {
             "index": index,
             "headerRow": headerRow,
             "row": row,
+            "hasHeader": _vm.hasHeader,
             "groupOptions": _vm.groupOptions,
             "getRowStyleClass": _vm.getRowStyleClass,
             "getClasses": _vm.getClasses,
@@ -15243,7 +15272,7 @@
               return [_vm._t("checkbox", null, null, props)];
             }
           }], null, true)
-        }) : _vm._e();
+        });
       }), _vm._v(" "), _vm.groupHeaderOnBottom ? _c('vgt-header-row', {
         attrs: {
           "header-row": headerRow,
