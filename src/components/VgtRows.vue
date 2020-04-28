@@ -1,5 +1,5 @@
 <template>
-  <tr v-if="groupOptions.collapsable ? headerRow.vgtIsExpanded : true">
+  <tr v-if="isExpanded">
     <td :colspan="fullColspan" class="table-container">
       <table :class="tableStyleClasses">
         <tbody :class="`depth-${this.depth}`">
@@ -23,7 +23,7 @@
                 :almostAllSelected="almostAllSelected"
                 :displayArrow="columnCollapsable(-1) && hasChildren"
                 :isExpanded="row.vgtIsExpanded"
-                :expand="columnCollapsable(-1)
+                :expand="() => columnCollapsable(-1)
                       ? toggleExpand()
                       : onCellClicked(row, column, index, $event)"
               >
@@ -79,6 +79,7 @@
             :index="childIndex"
             :headerRow="row"
             :row="childRow"
+            :hasHeader="hasHeader"
             :groupOptions="groupOptions"
             :getRowStyleClass="getRowStyleClass"
             :getClasses="getClasses"
@@ -136,6 +137,7 @@ export default {
     headerRow: {},
     row: {},
     index: {},
+    hasHeader: {},
     groupOptions: {},
     getRowStyleClass: {},
     lineNumbers: {},
@@ -206,6 +208,12 @@ export default {
     },
     increaseDepth() {
       return this.depth + 1;
+    },
+    isExpanded() {
+      if (this.groupOptions.collapsable && !(this.depth === 1 && this.hasHeader === false)) {
+        return this.headerRow.vgtIsExpanded
+      }
+      return true;
     }
   }
 };

@@ -2,6 +2,7 @@
   <vue-good-table
     :columns="columns"
     :rows="rows"
+    :hasHeader="false"
     :select-options="{
       enabled: true,
       selectOnCheckboxOnly: true,
@@ -24,7 +25,8 @@
     }"
     styleClass="vgt-table condensed bordered"
     ref="groupedTable"
-  ></vue-good-table>
+  >
+  </vue-good-table>
 </template>
 
 <script>
