@@ -128,7 +128,7 @@
           <tbody v-for="(headerRow, index) in paginated" :key="index">
             <!-- if group row header is at the top -->
             <vgt-header-row
-              v-if="groupHeaderOnTop"
+              v-if="groupHeaderOnTop && hasHeader"
               @vgtExpand="toggleExpand(index)"
               :header-row="headerRow"
               :columns="columns"
@@ -159,12 +159,12 @@
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
             <vgt-rows
-              v-if="headerRow.children && headerRow.children.length"
-              v-for="(row, index) in headerRow.children"
+              v-for="(row, index) in getRows(headerRow)"
               :key="index"
               :index="index"
               :headerRow="headerRow"
               :row="row"
+              :hasHeader="hasHeader"
               :groupOptions="groupOptions"
               :getRowStyleClass="getRowStyleClass"
               :getClasses="getClasses"
@@ -301,6 +301,7 @@ export default {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
     fixedHeader: { default: false, type: Boolean },
+    hasHeader: { default: true, type: Boolean },
     theme: { default: "" },
     mode: { default: "local" }, // could be remote
     totalRows: {}, // required if mode = 'remote'
@@ -840,6 +841,15 @@ export default {
   },
 
   methods: {
+    getRows(headerRow) {
+      if(headerRow.children && headerRow.children.length) {
+        if (this.hasHeader) {
+          return headerRow.children;
+        }
+        return [headerRow];
+      }
+      return [];
+    },
     toggleExpand(index) {
       let headerRow = this.filteredRows[index];
       if (headerRow) {

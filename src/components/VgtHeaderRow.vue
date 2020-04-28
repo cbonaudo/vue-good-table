@@ -24,11 +24,10 @@
         :index="0"
         :allSelected="allSelected"
         :almostAllSelected="almostAllSelected"
+        
         :displayArrow="columnCollapsable(-1)"
         :isExpanded="headerRow.vgtIsExpanded"
-        :expand="columnCollapsable(-1)
-              ? $emit('vgtExpand', !headerRow.vgtIsExpanded)
-              : () => {}"
+        :expand="() => columnCollapsable(-1) && $emit('vgtExpand', !headerRow.vgtIsExpanded)"
       >
         <span
           v-if="columnCollapsable(-1)"
