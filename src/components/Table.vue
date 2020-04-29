@@ -150,11 +150,7 @@
                 ></slot>
               </template>
               <template #header-checkbox="props">
-                <slot
-                  name="checkbox"
-                  v-bind="props"
-                >
-                </slot>
+                <slot name="checkbox" v-bind="props" />
               </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
@@ -197,11 +193,7 @@
                 </slot>
               </template>
               <template #checkbox="props">
-                <slot
-                  name="checkbox"
-                  v-bind="props"
-                >
-                </slot>
+                <slot name="checkbox" v-bind="props" />
               </template>
             </vgt-rows>
             <!-- if group row header is at the bottom -->

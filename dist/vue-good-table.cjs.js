@@ -8777,16 +8777,18 @@ var __vue_render__$5 = function __vue_render__() {
       }
     }
   })], {
-    "selectRow": _vm.selectRow,
+    "selectRow": function selectRow() {
+      return _vm.selectRow(_vm.headerRow, 0, _vm.$event);
+    },
     "headerRow": _vm.headerRow,
     "index": 0,
-    "allSelected": _vm.allSelected,
-    "almostAllSelected": _vm.almostAllSelected,
-    "displayArrow": _vm.columnCollapsable(-1),
-    "isExpanded": _vm.headerRow.vgtIsExpanded,
-    "expand": function expand() {
+    "expanded": _vm.headerRow.vgtIsExpanded,
+    "onClick": function onClick() {
       return _vm.columnCollapsable(-1) && _vm.$emit('vgtExpand', !_vm.headerRow.vgtIsExpanded);
-    }
+    },
+    "showTriangle": _vm.columnCollapsable(-1),
+    "allSelected": _vm.allSelected,
+    "almostAllSelected": _vm.almostAllSelected
   })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
     return _vm.headerRow.mode !== 'span' && !column.hidden ? _c('td', {
       key: i,
@@ -8950,7 +8952,9 @@ var __vue_render__$6 = function __vue_render__() {
   }, [_c('table', {
     "class": _vm.tableStyleClasses
   }, [_c('tbody', {
-    "class": "depth-" + this.depth
+    "class": ["depth-" + this.depth, {
+      'depth-is-expanded': _vm.row.vgtIsExpanded
+    }]
   }, [_c('tr', {
     key: _vm.row.originalIndex,
     "class": _vm.getRowStyleClass(_vm.row),
@@ -9000,16 +9004,18 @@ var __vue_render__$6 = function __vue_render__() {
       }
     }
   })], {
-    "selectRow": _vm.selectRow,
+    "expanded": _vm.row.vgtIsExpanded,
+    "onClick": function onClick() {
+      return _vm.columnCollapsable(-1) ? _vm.toggleExpand() : _vm.onCellClicked(_vm.row, _vm.column, _vm.index, _vm.$event);
+    },
+    "selectRow": function selectRow() {
+      return _vm.selectRow(_vm.row, _vm.index, _vm.$event);
+    },
     "row": _vm.row,
     "index": _vm.index,
+    "showTriangle": _vm.columnCollapsable(-1) && _vm.hasChildren,
     "allSelected": _vm.allSelected,
-    "almostAllSelected": _vm.almostAllSelected,
-    "displayArrow": _vm.columnCollapsable(-1) && _vm.hasChildren,
-    "isExpanded": _vm.row.vgtIsExpanded,
-    "expand": function expand() {
-      return _vm.columnCollapsable(-1) ? _vm.toggleExpand() : _vm.onCellClicked(_vm.row, _vm.column, _vm.index, _vm.$event);
-    }
+    "almostAllSelected": _vm.almostAllSelected
   })], 2) : _vm._e(), _vm._v(" "), _vm._l(_vm.columns, function (column, i) {
     return !column.hidden && column.field ? _c('td', {
       key: i,
@@ -9075,10 +9081,7 @@ var __vue_render__$6 = function __vue_render__() {
       }, {
         key: "checkbox",
         fn: function fn(props) {
-          return [_vm._t("checkbox", null, {
-            "selectRow": props.selectRow,
-            "row": props.row
-          })];
+          return [_vm._t("checkbox", null, null, props)];
         }
       }], null, true)
     }) : _vm._e();

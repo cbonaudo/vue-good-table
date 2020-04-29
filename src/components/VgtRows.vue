@@ -2,7 +2,7 @@
   <tr v-if="isExpanded">
     <td :colspan="fullColspan" class="table-container">
       <table :class="tableStyleClasses">
-        <tbody :class="`depth-${this.depth}`">
+        <tbody :class="[`depth-${this.depth}`, {'depth-is-expanded': row.vgtIsExpanded}]">
           <tr
             :key="row.originalIndex"
             :class="getRowStyleClass(row)"
@@ -16,16 +16,16 @@
             <th v-if="selectable" class="vgt-checkbox-col">
               <slot
                 name="checkbox"
-                :selectRow="selectRow"
-                :row="row" 
+                :expanded="row.vgtIsExpanded"
+                :onClick="() => columnCollapsable(-1)
+                    ? toggleExpand()
+                    : onCellClicked(row, column, index, $event)"
+                :selectRow="() => selectRow(row, index, $event)"
+                :row="row"
                 :index="index"
+                :show-triangle="columnCollapsable(-1) && hasChildren"
                 :allSelected="allSelected"
                 :almostAllSelected="almostAllSelected"
-                :displayArrow="columnCollapsable(-1) && hasChildren"
-                :isExpanded="row.vgtIsExpanded"
-                :expand="() => columnCollapsable(-1)
-                      ? toggleExpand()
-                      : onCellClicked(row, column, index, $event)"
               >
                 <span
                   v-if="columnCollapsable(-1) && hasChildren"
@@ -113,8 +113,7 @@
               </slot>
             </template>
             <template #checkbox="props">
-              <slot name="checkbox" :selectRow="props.selectRow" :row="props.row">
-              </slot>
+              <slot name="checkbox" v-bind="props" />
             </template>
           </vgt-rows>
         </tbody>

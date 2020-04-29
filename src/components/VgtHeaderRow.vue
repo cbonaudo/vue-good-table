@@ -19,15 +19,14 @@
     <th class="vgt-row-header" v-if="headerRow.mode !== 'span' && selectable">
       <slot
         name="header-checkbox"
-        :selectRow="selectRow"
+        :selectRow="() => selectRow(headerRow, 0, $event)"
         :headerRow="headerRow"
         :index="0"
+        :expanded="headerRow.vgtIsExpanded"
+        :onClick="() => columnCollapsable(-1) && $emit('vgtExpand', !headerRow.vgtIsExpanded)"
+        :show-triangle="columnCollapsable(-1)"
         :allSelected="allSelected"
         :almostAllSelected="almostAllSelected"
-        
-        :displayArrow="columnCollapsable(-1)"
-        :isExpanded="headerRow.vgtIsExpanded"
-        :expand="() => columnCollapsable(-1) && $emit('vgtExpand', !headerRow.vgtIsExpanded)"
       >
         <span
           v-if="columnCollapsable(-1)"
@@ -39,7 +38,6 @@
               : () => {}
           "
         ></span>
-
         <input
           type="checkbox"
           @click.stop="selectRow(headerRow, 0, $event)"
