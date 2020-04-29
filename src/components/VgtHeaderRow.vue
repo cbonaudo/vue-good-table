@@ -29,6 +29,7 @@
         :almostAllSelected="almostAllSelected"
       >
         <span
+          v-if="columnCollapsable(-1)"
           class="triangle"
           :class="{ expand: headerRow.vgtIsExpanded }"
           @click="
