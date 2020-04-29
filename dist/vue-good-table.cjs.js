@@ -8751,7 +8751,7 @@ var __vue_render__$5 = function __vue_render__() {
     staticClass: "vgt-row-header"
   }) : _vm._e(), _vm._v(" "), _vm.headerRow.mode !== 'span' && _vm.selectable ? _c('th', {
     staticClass: "vgt-row-header"
-  }, [_vm._t("header-checkbox", [_c('span', {
+  }, [_vm._t("header-checkbox", [_vm.columnCollapsable(-1) ? _c('span', {
     staticClass: "triangle",
     "class": {
       expand: _vm.headerRow.vgtIsExpanded
@@ -8761,7 +8761,7 @@ var __vue_render__$5 = function __vue_render__() {
         _vm.columnCollapsable(-1) ? _vm.$emit('vgtExpand', !_vm.headerRow.vgtIsExpanded) : function () {};
       }
     }
-  }), _vm._v(" "), _c('input', {
+  }) : _vm._e(), _vm._v(" "), _c('input', {
     attrs: {
       "type": "checkbox",
       "aria-label": "toggle select " + _vm.headerRow.name
