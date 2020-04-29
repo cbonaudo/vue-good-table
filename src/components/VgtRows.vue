@@ -2,7 +2,7 @@
   <tr v-if="isExpanded">
     <td :colspan="fullColspan" class="table-container">
       <table :class="tableStyleClasses">
-        <tbody :class="`depth-${this.depth}`">
+        <tbody :class="[`depth-${this.depth}`, {'depth-is-expanded': row.vgtIsExpanded}]">
           <tr
             :key="row.originalIndex"
             :class="getRowStyleClass(row)"
