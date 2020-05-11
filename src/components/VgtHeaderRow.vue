@@ -16,37 +16,7 @@
     </td>
     <!-- if the mode is not span, we display every column -->
     <th class="vgt-row-header" v-if="headerRow.mode !== 'span' && lineNumbers"></th>
-    <th class="vgt-row-header" v-if="headerRow.mode !== 'span' && selectable">
-      <slot
-        name="header-checkbox"
-        :selectRow="() => selectRow(headerRow, 0, $event)"
-        :headerRow="headerRow"
-        :index="0"
-        :expanded="headerRow.vgtIsExpanded"
-        :onClick="() => columnCollapsable(-1) && $emit('vgtExpand', !headerRow.vgtIsExpanded)"
-        :show-triangle="columnCollapsable(-1)"
-        :allSelected="allSelected"
-        :almostAllSelected="almostAllSelected"
-      >
-        <span
-          v-if="columnCollapsable(-1)"
-          class="triangle"
-          :class="{ expand: headerRow.vgtIsExpanded }"
-          @click="
-            columnCollapsable(-1)
-              ? $emit('vgtExpand', !headerRow.vgtIsExpanded)
-              : () => {}
-          "
-        ></span>
-        <input
-          type="checkbox"
-          @click.stop="selectRow(headerRow, 0, $event)"
-          :checked="allSelected"
-          :aria-label="`toggle select ${headerRow.name}`"
-          :indeterminate.prop="almostAllSelected"
-        />
-      </slot>
-    </th>
+    <th class="vgt-row-header" v-if="headerRow.mode !== 'span' && selectable"></th>
     <td
       v-if="headerRow.mode !== 'span' && !column.hidden"
       v-for="(column, i) in columns"
@@ -78,12 +48,6 @@
 </template>
 
 <script>
-import {
-  recursiveHasRowUnselected,
-  recursiveHasRowSelected,
-  recursiveSelect
-} from "./utils/recursive";
-
 export default {
   name: "VgtHeaderRow",
   props: {
@@ -114,9 +78,6 @@ export default {
     },
     fullColspan: {
       type: Number
-    },
-    onCheckboxClicked: {
-      type: Function
     }
   },
   data() {
@@ -130,39 +91,13 @@ export default {
       }
     }
   },
-  computed: {
-    allSelected() {
-      if (this.headerRow.children) {
-        return !recursiveHasRowUnselected(this.headerRow);
-      } else {
-        return this.headerRow.vgtSelected;
-      }
-    },
-    almostAllSelected() {
-      if (this.headerRow.children && !this.allSelected) {
-        return recursiveHasRowSelected(this.headerRow);
-      } else {
-        return false;
-      }
-    }
-  },
+  computed: {},
   methods: {
     columnCollapsable: function(currentIndex) {
       if (this.collapsable === true) {
         return currentIndex === 0;
       }
       return currentIndex === this.collapsable;
-    },
-    selectRow(row, index, event) {
-      this.onCheckboxClicked(row, index, event);
-      if (this.headerRow.children) {
-        if (this.allSelected) {
-          recursiveSelect(this.headerRow.children, false, this.$set);
-        } else {
-          recursiveSelect(this.headerRow.children, true, this.$set);
-        }
-        this.headerRow.vgtSelected = this.allSelected;
-      }
     }
   },
   mounted() {},
