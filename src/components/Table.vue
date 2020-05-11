@@ -82,10 +82,7 @@
             </template>
 
             <template slot="header-checkbox-all" slot-scope="props">
-              <slot
-                name="header-checkbox-all"
-                v-bind="props"
-              />
+              <slot name="header-checkbox-all" v-bind="props" />
             </template>
           </thead>
         </table>
@@ -117,10 +114,7 @@
             </template>
 
             <template slot="header-checkbox-all" slot-scope="props">
-              <slot
-                name="header-checkbox-all"
-                v-bind="props"
-              />
+              <slot name="header-checkbox-all" v-bind="props" />
             </template>
           </thead>
 
@@ -135,7 +129,6 @@
               :line-numbers="lineNumbers"
               :selectable="selectable"
               :collapsable="groupOptions.collapsable"
-              :onCheckboxClicked="onCheckboxClicked"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
@@ -148,9 +141,6 @@
                   :formattedRow="props.formattedRow"
                   :row="props.row"
                 ></slot>
-              </template>
-              <template #header-checkbox="props">
-                <slot name="checkbox" v-bind="props" />
               </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
@@ -203,7 +193,6 @@
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
-              :onCheckboxClicked="onCheckboxClicked"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
@@ -834,7 +823,7 @@ export default {
 
   methods: {
     getRows(headerRow) {
-      if(headerRow.children && headerRow.children.length) {
+      if (headerRow.children && headerRow.children.length) {
         if (this.hasHeader) {
           return headerRow.children;
         }
