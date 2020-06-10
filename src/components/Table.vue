@@ -1,11 +1,15 @@
 <template>
-  <div :class="wrapStyleClasses">
+  <div 
+    :class="wrapStyleClasses">
     <div v-if="isLoading" class="vgt-loading vgt-center-align">
       <slot name="loadingContent">
-        <span class="vgt-loading__content">Loading...</span>
+        <span class="vgt-loading__content">
+          Loading...
+        </span>
       </slot>
     </div>
-    <div class="vgt-inner-wrap" :class="{'is-loading': isLoading}">
+    <div class="vgt-inner-wrap"
+      :class="{'is-loading': isLoading}">
       <slot
         v-if="paginate && paginateOnTop"
         name="pagination-top"
@@ -39,7 +43,8 @@
         :global-search-placeholder="searchPlaceholder"
       >
         <template slot="internal-table-actions">
-          <slot name="table-actions"></slot>
+          <slot name="table-actions">
+          </slot>
         </template>
       </vgt-global-search>
       <div
@@ -48,13 +53,22 @@
         :class="selectionInfoClass"
       >
         {{selectionInfo}}
-        <a href @click.prevent="unselectAllInternal(true)">{{clearSelectionText}}</a>
+        <a 
+          href=""
+          @click.prevent="unselectAllInternal(true)"
+        >
+          {{clearSelectionText}}
+        </a>
         <div class="vgt-selection-info-row__actions vgt-pull-right">
-          <slot name="selected-row-actions"></slot>
+          <slot name="selected-row-actions">
+          </slot>
         </div>
       </div>
       <div class="vgt-fixed-header">
-        <table v-if="fixedHeader" :class="tableStyleClasses">
+        <table
+          v-if="fixedHeader"
+          :class="tableStyleClasses"
+        >
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -75,8 +89,14 @@
             :paginated="paginated"
             :table-ref="$refs.table"
           >
-            <template slot="table-column" slot-scope="props">
-              <slot name="table-column" :column="props.column">
+            <template 
+              slot="table-column" 
+              slot-scope="props"
+            >
+              <slot
+                name="table-column" 
+                :column="props.column"
+              >
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
@@ -87,8 +107,14 @@
           </thead>
         </table>
       </div>
-      <div :class="{'vgt-responsive': responsive}" :style="wrapperStyles">
-        <table ref="table" :class="tableStyleClasses">
+      <div
+        :class="{'vgt-responsive': responsive}"
+        :style="wrapperStyles"
+      >
+        <table
+          ref="table"
+          :class="tableStyleClasses"
+        >
           <!-- Table header -->
           <thead
             is="vgt-table-header"
@@ -107,8 +133,14 @@
             :getClasses="getClasses"
             :searchEnabled="searchEnabled"
           >
-            <template slot="table-column" slot-scope="props">
-              <slot name="table-column" :column="props.column">
+            <template
+              slot="table-column"
+              slot-scope="props"
+            >
+              <slot
+                name="table-column"
+                :column="props.column"
+              >
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
@@ -119,7 +151,10 @@
           </thead>
 
           <!-- Table body starts here -->
-          <tbody v-for="(headerRow, index) in paginated" :key="index">
+          <tbody
+            v-for="(headerRow, index) in paginated"
+            :key="index"
+          >
             <!-- if group row header is at the top -->
             <vgt-header-row
               v-if="groupHeaderOnTop && hasHeader"
@@ -134,13 +169,18 @@
               :get-classes="getClasses"
               :full-colspan="fullColspan"
             >
-              <template v-if="hasHeaderRowTemplate" slot="table-header-row" slot-scope="props">
+              <template
+                v-if="hasHeaderRowTemplate"
+                slot="table-header-row"
+                slot-scope="props"
+              >
                 <slot
                   name="table-header-row"
                   :column="props.column"
                   :formattedRow="props.formattedRow"
                   :row="props.row"
-                ></slot>
+                >
+                </slot>
               </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
@@ -178,8 +218,14 @@
                   :formattedRow="formattedRow(props.row)"
                   :index="props.index"
                 >
-                  <span v-if="!props.column.html">{{ collectFormatted(props.row, props.column) }}</span>
-                  <span v-if="props.column.html" v-html="collect(props.row, column.field)"></span>
+                  <span v-if="!props.column.html">
+                    {{ collectFormatted(props.row, props.column) }}
+                  </span>
+                  <span
+                    v-if="props.column.html"
+                    v-html="collect(props.row, column.field)"
+                  >
+                  </span>
                 </slot>
               </template>
               <template #checkbox="props">
@@ -198,13 +244,18 @@
               :get-classes="getClasses"
               :full-colspan="fullColspan"
             >
-              <template v-if="hasHeaderRowTemplate" slot="table-header-row" slot-scope="props">
+              <template
+                v-if="hasHeaderRowTemplate"
+                slot="table-header-row"
+                slot-scope="props"
+              >
                 <slot
                   name="table-header-row"
                   :column="props.column"
                   :formattedRow="props.formattedRow"
                   :row="props.row"
-                ></slot>
+                >
+                </slot>
               </template>
             </vgt-header-row>
           </tbody>
@@ -213,7 +264,9 @@
             <tr>
               <td :colspan="fullColspan">
                 <slot name="emptystate">
-                  <div class="vgt-center-align vgt-text-disabled">No data for table</div>
+                  <div class="vgt-center-align vgt-text-disabled">
+                    No data for table
+                  </div>
                 </slot>
               </td>
             </tr>
@@ -221,7 +274,8 @@
         </table>
       </div>
       <div v-if="hasFooterSlot" class="vgt-wrap__actions-footer">
-        <slot name="table-actions-bottom"></slot>
+        <slot name="table-actions-bottom">
+        </slot>
       </div>
       <slot
         v-if="paginate && paginateOnBottom"
@@ -253,40 +307,40 @@
 </template>
 
 <script>
-import each from "lodash.foreach";
-import assign from "lodash.assign";
-import cloneDeep from "lodash.clonedeep";
-import filter from "lodash.filter";
-import isEqual from "lodash.isequal";
-import diacriticless from "diacriticless";
-import defaultType from "./types/default";
-import VgtPagination from "./VgtPagination.vue";
-import VgtGlobalSearch from "./VgtGlobalSearch.vue";
-import VgtTableHeader from "./VgtTableHeader.vue";
-import VgtHeaderRow from "./VgtHeaderRow.vue";
-import VgtRows from "./VgtRows.vue";
+import each from 'lodash.foreach';
+import assign from 'lodash.assign';
+import cloneDeep from 'lodash.clonedeep';
+import filter from 'lodash.filter';
+import isEqual from 'lodash.isequal';
+import diacriticless from 'diacriticless';
+import defaultType from './types/default';
+import VgtPagination from './VgtPagination.vue';
+import VgtGlobalSearch from './VgtGlobalSearch.vue';
+import VgtTableHeader from './VgtTableHeader.vue';
+import VgtHeaderRow from './VgtHeaderRow.vue';
+import VgtRows from './VgtRows.vue';
 
 // here we load each data type module.
-import * as CoreDataTypes from "./types/index";
+import * as CoreDataTypes from './types/index';
 
 const dataTypes = {};
 const coreDataTypes = CoreDataTypes.default;
-each(Object.keys(coreDataTypes), key => {
-  const compName = key.replace(/^\.\//, "").replace(/\.js/, "");
+each(Object.keys(coreDataTypes), (key) => {
+  const compName = key.replace(/^\.\//, '').replace(/\.js/, '');
   dataTypes[compName] = coreDataTypes[key].default;
 });
 
 export default {
-  name: "vue-good-table",
+  name: 'vue-good-table',
   props: {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
     fixedHeader: { default: false, type: Boolean },
     hasHeader: { default: true, type: Boolean },
-    theme: { default: "" },
-    mode: { default: "local" }, // could be remote
+    theme: { default: '' },
+    mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
-    styleClass: { default: "vgt-table bordered" },
+    styleClass: { default: 'vgt-table bordered' },
     columns: {},
     rows: {},
     lineNumbers: { default: false },
@@ -297,22 +351,22 @@ export default {
     groupOptions: {
       default() {
         return {
-          enabled: false
+          enabled: false,
         };
-      }
+      },
     },
 
     selectOptions: {
       default() {
         return {
           enabled: false,
-          selectionInfoClass: "",
-          selectionText: "rows selected",
-          clearSelectionText: "clear",
+          selectionInfoClass: '',
+          selectionText: 'rows selected',
+          clearSelectionText: 'clear',
           disableSelectInfo: false,
-          selectHeader: false
+          selectHeader: false,
         };
-      }
+      },
     },
 
     // sort
@@ -321,9 +375,9 @@ export default {
         return {
           enabled: true,
           initialSortBy: {},
-          depthLevel: 1
+          depthLevel: 1,
         };
-      }
+      },
     },
 
     // pagination
@@ -333,11 +387,11 @@ export default {
           enabled: false,
           perPage: 10,
           perPageDropdown: null,
-          position: "bottom",
+          position: 'bottom',
           dropdownAllowAll: true,
-          mode: "records" // or pages
+          mode: 'records', // or pages
         };
-      }
+      },
     },
 
     searchOptions: {
@@ -347,10 +401,10 @@ export default {
           trigger: null,
           externalQuery: null,
           searchFn: null,
-          placeholder: "Search Table"
+          placeholder: 'Search Table',
         };
-      }
-    }
+      },
+    },
   },
 
   data: () => ({
@@ -358,21 +412,21 @@ export default {
     tableLoading: false,
 
     // text options
-    nextText: "Next",
-    prevText: "Prev",
-    rowsPerPageText: "Rows per page",
-    ofText: "of",
-    allText: "All",
-    pageText: "page",
+    nextText: 'Next',
+    prevText: 'Prev',
+    rowsPerPageText: 'Rows per page',
+    ofText: 'of',
+    allText: 'All',
+    pageText: 'page',
 
     // internal select options
     selectable: false,
     selectOnCheckboxOnly: false,
     selectAllByPage: true,
     disableSelectInfo: false,
-    selectionInfoClass: "",
-    selectionText: "rows selected",
-    clearSelectionText: "clear",
+    selectionInfoClass: '',
+    selectionText: 'rows selected',
+    clearSelectionText: 'clear',
 
     // internal sort options
     sortable: true,
@@ -383,7 +437,7 @@ export default {
     searchTrigger: null,
     externalSearchQuery: null,
     searchFn: null,
-    searchPlaceholder: "Search Table",
+    searchPlaceholder: 'Search Table',
     searchSkipDiacritics: false,
 
     // internal pagination options
@@ -393,27 +447,27 @@ export default {
     paginateOnBottom: true,
     customRowsPerPageDropdown: [],
     paginateDropdownAllowAll: true,
-    paginationMode: "records",
+    paginationMode: 'records',
 
     currentPage: 1,
     currentPerPage: 10,
     sorts: [],
-    globalSearchTerm: "",
+    globalSearchTerm: '',
     filteredRows: [],
     columnFilters: {},
     forceSearch: false,
     sortChanged: false,
-    dataTypes: dataTypes || {}
+    dataTypes: dataTypes || {},
   }),
 
   watch: {
     rows: {
       handler() {
-        this.$emit("update:isLoading", false);
+        this.$emit('update:isLoading', false);
         this.filterRows(this.columnFilters, false);
       },
       deep: true,
-      immediate: true
+      immediate: true,
     },
 
     selectOptions: {
@@ -421,7 +475,7 @@ export default {
         this.initializeSelect();
       },
       deep: true,
-      immediate: true
+      immediate: true,
     },
 
     paginationOptions: {
@@ -431,7 +485,7 @@ export default {
         }
       },
       deep: true,
-      immediate: true
+      immediate: true,
     },
 
     searchOptions: {
@@ -447,7 +501,7 @@ export default {
         this.initializeSearch();
       },
       deep: true,
-      immediate: true
+      immediate: true,
     },
 
     sortOptions: {
@@ -456,33 +510,33 @@ export default {
           this.initializeSort();
         }
       },
-      deep: true
+      deep: true,
     },
 
     selectedRows(newValue, oldValue) {
       if (!isEqual(newValue, oldValue)) {
-        this.$emit("on-selected-rows-change", {
+        this.$emit('on-selected-rows-change', {
           selectedRows: this.selectedRows
         });
       }
-    }
+    },
   },
 
   computed: {
     hasFooterSlot() {
-      return !!this.$slots["table-actions-bottom"];
+      return !!this.$slots['table-actions-bottom'];
     },
     wrapperStyles() {
       return {
-        overflow: "scroll-y",
-        maxHeight: this.maxHeight ? this.maxHeight : "auto"
+        overflow: 'scroll-y',
+        maxHeight: this.maxHeight ? this.maxHeight : 'auto',
       };
     },
 
     hasHeaderRowTemplate() {
       return (
-        !!this.$slots["table-header-row"] ||
-        !!this.$scopedSlots["table-header-row"]
+        !!this.$slots['table-header-row'] ||
+        !!this.$scopedSlots['table-header-row']
       );
     },
 
@@ -490,7 +544,7 @@ export default {
       if (!this.paginated.length) return true;
 
       if (
-        this.paginated[0].label === "no groups" &&
+        this.paginated[0].label === 'no groups' &&
         !this.paginated[0].children.length
       ) {
         return true;
@@ -531,8 +585,8 @@ export default {
 
     selectedPageRows() {
       const selectedRows = [];
-      each(this.paginated, headerRow => {
-        each(headerRow.children, row => {
+      each(this.paginated, (headerRow) => {
+        each(headerRow.children, (row) => {
           if (row.vgtSelected) {
             selectedRows.push(row);
           }
@@ -543,7 +597,7 @@ export default {
 
     selectedRows() {
       const selectedRows = [];
-      each(this.processedRows, headerRow => {
+      each(this.processedRows, (headerRow) => {
         selectedRows.push(...this.recursiveSelectedRows(headerRow));
       });
       return selectedRows.sort((r1, r2) => r1.originalIndex - r2.originalIndex);
@@ -565,7 +619,7 @@ export default {
         this.groupOptions &&
         this.groupOptions.enabled &&
         this.groupOptions.headerPosition &&
-        this.groupOptions.headerPosition === "bottom"
+        this.groupOptions.headerPosition === 'bottom'
       ) {
         return false;
       }
@@ -579,7 +633,7 @@ export default {
         this.groupOptions &&
         this.groupOptions.enabled &&
         this.groupOptions.headerPosition &&
-        this.groupOptions.headerPosition === "bottom"
+        this.groupOptions.headerPosition === 'bottom'
       ) {
         return true;
       }
@@ -587,7 +641,7 @@ export default {
     },
     totalRowCount() {
       let total = 0;
-      each(this.processedRows, headerRow => {
+      each(this.processedRows, (headerRow) => {
         if (this.selectOptions.selectHeader) {
           total++;
         }
@@ -597,14 +651,14 @@ export default {
     },
     totalPageRowCount() {
       let total = 0;
-      each(this.paginated, headerRow => {
+      each(this.paginated, (headerRow) => {
         total += headerRow.children ? headerRow.children.length : 0;
       });
       return total;
     },
     wrapStyleClasses() {
-      let classes = "vgt-wrap";
-      if (this.rtl) classes += " rtl";
+      let classes = 'vgt-wrap';
+      if (this.rtl) classes += ' rtl';
       classes += ` ${this.theme}`;
       return classes;
     },
@@ -625,12 +679,12 @@ export default {
       if (
         this.searchEnabled &&
         !!this.globalSearchTerm &&
-        this.searchTrigger !== "enter"
+        this.searchTrigger !== 'enter'
       ) {
         return true;
       }
 
-      if (this.externalSearchQuery != null && this.searchTrigger !== "enter") {
+      if (this.externalSearchQuery != null && this.searchTrigger !== 'enter') {
         return true;
       }
 
@@ -648,7 +702,7 @@ export default {
     processedRows() {
       // we only process rows when mode is local
       let computedRows = this.filteredRows;
-      if (this.mode === "remote") {
+      if (this.mode === 'remote') {
         return computedRows;
       }
 
@@ -657,12 +711,12 @@ export default {
         // here also we need to de-construct and then
         // re-construct the rows.
         const allRows = [];
-        each(this.filteredRows, headerRow => {
+        each(this.filteredRows, (headerRow) => {
           allRows.push(...headerRow.children);
         });
         const filteredRows = [];
-        each(allRows, row => {
-          each(this.columns, col => {
+        each(allRows, (row) => {
+          each(this.columns, (col) => {
             // if col does not have search disabled,
             if (!col.globalSearchDisabled) {
               // if a search function is provided,
@@ -696,17 +750,17 @@ export default {
         });
 
         // this is where we emit on search
-        this.$emit("on-search", {
+        this.$emit('on-search', {
           searchTerm: this.searchTerm,
-          rowCount: filteredRows.length
+          rowCount: filteredRows.length,
         });
 
         // here we need to reconstruct the nested structure
         // of rows
         computedRows = [];
-        each(this.filteredRows, headerRow => {
+        each(this.filteredRows, (headerRow) => {
           const i = headerRow.vgt_header_id;
-          const children = filter(filteredRows, ["vgt_id", i]);
+          const children = filter(filteredRows, ['vgt_id', i]);
           if (children.length) {
             const newHeaderRow = cloneDeep(headerRow);
             newHeaderRow.children = children;
@@ -726,7 +780,7 @@ export default {
 
       // if the filtering is event based, we need to maintain filter
       // rows
-      if (this.searchTrigger === "enter") {
+      if (this.searchTrigger === 'enter') {
         this.filteredRows = computedRows;
       }
 
@@ -736,14 +790,14 @@ export default {
     paginated() {
       if (!this.processedRows.length) return [];
 
-      if (this.mode === "remote") {
+      if (this.mode === 'remote') {
         return this.processedRows;
       }
 
       // for every group, extract the child rows
       // to cater to paging
       let paginatedRows = [];
-      each(this.processedRows, childRows => {
+      each(this.processedRows, (childRows) => {
         paginatedRows.push(...childRows.children);
       });
 
@@ -770,9 +824,9 @@ export default {
       }
       // reconstruct paginated rows here
       const reconstructedRows = [];
-      each(this.processedRows, headerRow => {
+      each(this.processedRows, (headerRow) => {
         const i = headerRow.vgt_header_id;
-        const children = filter(paginatedRows, ["vgt_id", i]);
+        const children = filter(paginatedRows, ['vgt_id', i]);
         if (children.length) {
           const newHeaderRow = headerRow;
           newHeaderRow.children = children;
@@ -788,9 +842,9 @@ export default {
       if (!this.groupOptions.enabled) {
         nestedRows = this.handleGrouped([
           {
-            label: "no groups",
+            label: 'no groups',
             children: rows
-          }
+          },
         ]);
       } else {
         nestedRows = this.handleGrouped(rows);
@@ -817,8 +871,8 @@ export default {
     },
 
     hasRowClickListener() {
-      return this.$listeners && this.$listeners["on-row-click"];
-    }
+      return this.$listeners && this.$listeners['on-row-click'];
+    },
   },
 
   methods: {
@@ -834,19 +888,19 @@ export default {
     toggleExpand(index) {
       let headerRow = this.filteredRows[index];
       if (headerRow) {
-        this.$set(headerRow, "vgtIsExpanded", !headerRow.vgtIsExpanded);
+        this.$set(headerRow, 'vgtIsExpanded', !headerRow.vgtIsExpanded);
       }
     },
 
     expandAll() {
-      this.filteredRows.forEach(row => {
-        this.$set(row, "vgtIsExpanded", true);
+      this.filteredRows.forEach((row) => {
+        this.$set(row, 'vgtIsExpanded', true);
       });
     },
 
     collapseAll() {
-      this.filteredRows.forEach(row => {
-        this.$set(row, "vgtIsExpanded", false);
+      this.filteredRows.forEach((row) => {
+        this.$set(row, 'vgtIsExpanded', false);
       });
     },
 
@@ -859,9 +913,9 @@ export default {
     handleSearch() {
       this.resetTable();
       // for remote mode, we need to emit on-search
-      if (this.mode === "remote") {
-        this.$emit("on-search", {
-          searchTerm: this.searchTerm
+      if (this.mode === 'remote') {
+        this.$emit('on-search', {
+          searchTerm: this.searchTerm,
         });
       }
     },
@@ -869,22 +923,22 @@ export default {
     reset() {
       this.initializeSort();
       this.changePage(1);
-      this.$refs["table-header-primary"].reset(true);
-      if (this.$refs["table-header-secondary"]) {
-        this.$refs["table-header-secondary"].reset(true);
+      this.$refs['table-header-primary'].reset(true);
+      if (this.$refs['table-header-secondary']) {
+        this.$refs['table-header-secondary'].reset(true);
       }
     },
 
     emitSelectedRows() {
-      this.$emit("on-select-all", {
+      this.$emit('on-select-all', {
         selected: this.selectedRowCount === this.totalRowCount,
-        selectedRows: this.selectedRows
+        selectedRows: this.selectedRows,
       });
     },
 
     recursiveSelect(rows, newValue) {
-      each(rows, row => {
-        this.$set(row, "vgtSelected", newValue);
+      each(rows, (row) => {
+        this.$set(row, 'vgtSelected', newValue);
         row.children && this.recursiveSelect(row.children, newValue);
       });
     },
@@ -909,7 +963,7 @@ export default {
     changePage(value) {
       if (this.paginationOptions.enabled) {
         let paginationWidget = this.$refs.paginationBottom;
-        if (this.paginationOptions.position === "top") {
+        if (this.paginationOptions.position === 'top') {
           paginationWidget = this.$refs.paginationTop;
         }
         if (paginationWidget) {
@@ -925,7 +979,7 @@ export default {
       return {
         currentPage: this.currentPage,
         currentPerPage: this.currentPerPage,
-        total: Math.floor(this.totalRowCount / this.currentPerPage)
+        total: Math.floor(this.totalRowCount / this.currentPerPage),
       };
     },
 
@@ -933,9 +987,9 @@ export default {
       this.currentPage = pagination.currentPage;
       const pageChangedEvent = this.pageChangedEvent();
       pageChangedEvent.prevPage = pagination.prevPage;
-      this.$emit("on-page-change", pageChangedEvent);
-      if (this.mode === "remote") {
-        this.$emit("update:isLoading", true);
+      this.$emit('on-page-change', pageChangedEvent);
+      if (this.mode === 'remote') {
+        this.$emit('update:isLoading', true);
       }
     },
 
@@ -943,23 +997,23 @@ export default {
       this.currentPerPage = pagination.currentPerPage;
       //* update perPage also
       const perPageChangedEvent = this.pageChangedEvent();
-      this.$emit("on-per-page-change", perPageChangedEvent);
-      if (this.mode === "remote") {
-        this.$emit("update:isLoading", true);
+      this.$emit('on-per-page-change', perPageChangedEvent);
+      if (this.mode === 'remote') {
+        this.$emit('update:isLoading', true);
       }
     },
 
     changeSort(sorts) {
       this.sorts = sorts;
-      this.$emit("on-sort-change", sorts);
+      this.$emit('on-sort-change', sorts);
 
       // every time we change sort we need to reset to page 1
       this.changePage(1);
 
       // if the mode is remote, we don't need to do anything
       // after this. just set table loading to true
-      if (this.mode === "remote") {
-        this.$emit("update:isLoading", true);
+      if (this.mode === 'remote') {
+        this.$emit('update:isLoading', true);
         return;
       }
       this.sortChanged = true;
@@ -967,70 +1021,70 @@ export default {
 
     // checkbox click should always do the following
     onCheckboxClicked(row, index, event) {
-      this.$set(row, "vgtSelected", !row.vgtSelected);
-      this.$emit("on-row-click", {
+      this.$set(row, 'vgtSelected', !row.vgtSelected);
+      this.$emit('on-row-click', {
         row,
         pageIndex: index,
         selected: !!row.vgtSelected,
-        event
+        event,
       });
     },
 
     onRowDoubleClicked(row, index, event) {
-      this.$emit("on-row-dblclick", {
+      this.$emit('on-row-dblclick', {
         row,
         pageIndex: index,
         selected: !!row.vgtSelected,
-        event
+        event,
       });
     },
 
     onRowClicked(row, index, event) {
       if (this.selectable && !this.selectOnCheckboxOnly) {
-        this.$set(row, "vgtSelected", !row.vgtSelected);
+        this.$set(row, 'vgtSelected', !row.vgtSelected);
       }
-      this.$emit("on-row-click", {
+      this.$emit('on-row-click', {
         row,
         pageIndex: index,
         selected: !!row.vgtSelected,
-        event
+        event,
       });
     },
 
     onRowAuxClicked(row, index, event) {
-      this.$emit("on-row-aux-click", {
+      this.$emit('on-row-aux-click', {
         row,
         pageIndex: index,
         selected: !!row.vgtSelected,
-        event
+        event,
       });
     },
 
     onCellClicked(row, column, rowIndex, event) {
-      this.$emit("on-cell-click", {
+      this.$emit('on-cell-click', {
         row,
         column,
         rowIndex,
-        event
+        event,
       });
     },
 
     onMouseenter(row, index) {
-      this.$emit("on-row-mouseenter", {
+      this.$emit('on-row-mouseenter', {
         row,
-        pageIndex: index
+        pageIndex: index,
       });
     },
 
     onMouseleave(row, index) {
-      this.$emit("on-row-mouseleave", {
+      this.$emit('on-row-mouseleave', {
         row,
-        pageIndex: index
+        pageIndex: index,
       });
     },
 
     searchTableOnEnter() {
-      if (this.searchTrigger === "enter") {
+      if (this.searchTrigger === 'enter') {
         this.handleSearch();
         // we reset the filteredRows here because
         // we want to search across everything.
@@ -1041,7 +1095,7 @@ export default {
     },
 
     searchTableOnKeyUp() {
-      if (this.searchTrigger !== "enter") {
+      if (this.searchTrigger !== 'enter') {
         this.handleSearch();
       }
     },
@@ -1060,9 +1114,9 @@ export default {
       // utility function to get nested property
       function dig(obj, selector) {
         let result = obj;
-        const splitter = selector.split(".");
+        const splitter = selector.split('.');
         for (let i = 0; i < splitter.length; i++) {
-          if (typeof result === "undefined" || result === null) {
+          if (typeof result === 'undefined' || result === null) {
             return undefined;
           }
           result = result[splitter[i]];
@@ -1070,8 +1124,8 @@ export default {
         return result;
       }
 
-      if (typeof field === "function") return field(obj);
-      if (typeof field === "string") return dig(obj, field);
+      if (typeof field === 'function') return field(obj);
+      if (typeof field === 'string') return dig(obj, field);
       return undefined;
     },
 
@@ -1082,11 +1136,11 @@ export default {
       } else {
         value = this.collect(obj, column.field);
       }
-      if (value === undefined) return "";
+      if (value === undefined) return '';
 
       // if user has supplied custom formatter,
       // use that here
-      if (column.formatFn && typeof column.formatFn === "function") {
+      if (column.formatFn && typeof column.formatFn === 'function') {
         return column.formatFn(value, obj);
       }
 
@@ -1124,15 +1178,15 @@ export default {
       if (this.rtl) isRight = true;
 
       const classes = {
-        "vgt-right-align": isRight,
-        "vgt-left-align": !isRight
+        'vgt-right-align': isRight,
+        'vgt-left-align': !isRight,
       };
 
       // for td we need to check if value is
       // a function.
-      if (typeof custom === "function") {
+      if (typeof custom === 'function') {
         classes[custom(row)] = true;
-      } else if (typeof custom === "string") {
+      } else if (typeof custom === 'string') {
         classes[custom] = true;
       }
       return classes;
@@ -1141,10 +1195,7 @@ export default {
     filterMultiselectItems(column, row) {
       const columnFieldName = column.field;
       const columnFilters = this.columnFilters[columnFieldName];
-      if (
-        column.filterOptions &&
-        column.filterOptions.filterMultiselectDropdownItems
-      ) {
+      if (column.filterOptions && column.filterOptions.filterMultiselectDropdownItems) {
         if (columnFilters.length === 0) {
           return true;
         }
@@ -1153,15 +1204,13 @@ export default {
         const typeDef = column.typeDef;
         for (let filter of columnFilters) {
           let filterLabel = filter;
-          if (typeof filter === "object") {
+          if (typeof filter === 'object') {
             filterLabel = filter.label;
           }
-          if (
-            typeDef.filterPredicate(
-              this.collect(row, columnFieldName),
-              filterLabel
-            )
-          ) {
+          if (typeDef.filterPredicate(
+            this.collect(row, columnFieldName),
+            filterLabel
+          )) {
             return true;
           }
         }
@@ -1185,22 +1234,22 @@ export default {
         // to 1
         // if the mode is remote, we only need to reset, if this is
         // being called from filter, not when rows are changing
-        if (this.mode !== "remote" || fromFilter) {
+        if (this.mode !== 'remote' || fromFilter) {
           this.changePage(1);
         }
         // we need to emit an event and that's that.
         // but this only needs to be invoked if filter is changing
         // not when row object is modified.
         if (fromFilter) {
-          this.$emit("on-column-filter", {
-            columnFilters: this.columnFilters
+          this.$emit('on-column-filter', {
+            columnFilters: this.columnFilters,
           });
         }
 
         // if mode is remote, we don't do any filtering here.
-        if (this.mode === "remote") {
+        if (this.mode === 'remote') {
           if (fromFilter) {
-            this.$emit("update:isLoading", true);
+            this.$emit('update:isLoading', true);
           } else {
             // if remote filtering has already been taken care of.
             this.filteredRows = computedRows;
@@ -1211,12 +1260,12 @@ export default {
         for (let i = 0; i < this.typedColumns.length; i++) {
           const col = this.typedColumns[i];
           if (this.columnFilters[col.field]) {
-            computedRows = each(computedRows, headerRow => {
-              const newChildren = headerRow.children.filter(row => {
+            computedRows = each(computedRows, (headerRow) => {
+              const newChildren = headerRow.children.filter((row) => {
                 // If column has a custom filter, use that.
                 if (
                   col.filterOptions &&
-                  typeof col.filterOptions.filterFn === "function"
+                  typeof col.filterOptions.filterFn === 'function'
                 ) {
                   return col.filterOptions.filterFn(
                     this.collect(row, col.field),
@@ -1236,7 +1285,7 @@ export default {
                   this.columnFilters[col.field],
                   false,
                   col.filterOptions &&
-                    typeof col.filterOptions.filterDropdownItems === "object"
+                    typeof col.filterOptions.filterDropdownItems === 'object'
                 );
               });
               // should we remove the header?
@@ -1249,14 +1298,14 @@ export default {
     },
 
     getCurrentIndex(index) {
-      return (this.currentPage - 1) * this.currentPerPage + index + 1;
+      return ((this.currentPage - 1) * this.currentPerPage) + index + 1;
     },
 
     getRowStyleClass(row) {
-      let classes = "";
-      if (this.hasRowClickListener) classes += "clickable";
+      let classes = '';
+      if (this.hasRowClickListener) classes += 'clickable';
       let rowStyleClasses;
-      if (typeof this.rowStyleClass === "function") {
+      if (typeof this.rowStyleClass === 'function') {
         rowStyleClasses = this.rowStyleClass(row);
       } else {
         rowStyleClasses = this.rowStyleClass;
@@ -1270,7 +1319,7 @@ export default {
     handleGrouped(originalRows) {
       each(originalRows, (headerRow, i) => {
         headerRow.vgt_header_id = i;
-        each(headerRow.children, childRow => {
+        each(headerRow.children, (childRow) => {
           childRow.vgt_id = i;
         });
       });
@@ -1291,21 +1340,21 @@ export default {
         pageLabel,
         allLabel,
         setCurrentPage,
-        mode
+        mode,
       } = this.paginationOptions;
 
-      if (typeof enabled === "boolean") {
+      if (typeof enabled === 'boolean') {
         this.paginate = enabled;
       }
 
-      if (typeof perPage === "number") {
+      if (typeof perPage === 'number') {
         this.perPage = perPage;
       }
 
-      if (position === "top") {
+      if (position === 'top') {
         this.paginateOnTop = true; // default is false
         this.paginateOnBottom = false; // default is true
-      } else if (position === "both") {
+      } else if (position === 'both') {
         this.paginateOnTop = true;
         this.paginateOnBottom = true;
       }
@@ -1317,39 +1366,39 @@ export default {
         }
       }
 
-      if (typeof dropdownAllowAll === "boolean") {
+      if (typeof dropdownAllowAll === 'boolean') {
         this.paginateDropdownAllowAll = dropdownAllowAll;
       }
 
-      if (typeof mode === "string") {
+      if (typeof mode === 'string') {
         this.paginationMode = mode;
       }
 
-      if (typeof nextLabel === "string") {
+      if (typeof nextLabel === 'string') {
         this.nextText = nextLabel;
       }
 
-      if (typeof prevLabel === "string") {
+      if (typeof prevLabel === 'string') {
         this.prevText = prevLabel;
       }
 
-      if (typeof rowsPerPageLabel === "string") {
+      if (typeof rowsPerPageLabel === 'string') {
         this.rowsPerPageText = rowsPerPageLabel;
       }
 
-      if (typeof ofLabel === "string") {
+      if (typeof ofLabel === 'string') {
         this.ofText = ofLabel;
       }
 
-      if (typeof pageLabel === "string") {
+      if (typeof pageLabel === 'string') {
         this.pageText = pageLabel;
       }
 
-      if (typeof allLabel === "string") {
+      if (typeof allLabel === 'string') {
         this.allText = allLabel;
       }
 
-      if (typeof setCurrentPage === "number") {
+      if (typeof setCurrentPage === 'number') {
         setTimeout(() => {
           this.changePage(setCurrentPage);
         }, 500);
@@ -1363,30 +1412,30 @@ export default {
         externalQuery,
         searchFn,
         placeholder,
-        skipDiacritics
+        skipDiacritics,
       } = this.searchOptions;
 
-      if (typeof enabled === "boolean") {
+      if (typeof enabled === 'boolean') {
         this.searchEnabled = enabled;
       }
 
-      if (trigger === "enter") {
+      if (trigger === 'enter') {
         this.searchTrigger = trigger;
       }
 
-      if (typeof externalQuery === "string") {
+      if (typeof externalQuery === 'string') {
         this.externalSearchQuery = externalQuery;
       }
 
-      if (typeof searchFn === "function") {
+      if (typeof searchFn === 'function') {
         this.searchFn = searchFn;
       }
 
-      if (typeof placeholder === "string") {
+      if (typeof placeholder === 'string') {
         this.searchPlaceholder = placeholder;
       }
 
-      if (typeof skipDiacritics === "boolean") {
+      if (typeof skipDiacritics === 'boolean') {
         this.searchSkipDiacritics = skipDiacritics;
       }
     },
@@ -1394,21 +1443,21 @@ export default {
     initializeSort() {
       const { enabled, initialSortBy } = this.sortOptions;
 
-      if (typeof enabled === "boolean") {
+      if (typeof enabled === 'boolean') {
         this.sortable = enabled;
       }
 
       //* initialSortBy can be an array or an object
-      if (typeof initialSortBy === "object") {
+      if (typeof initialSortBy === 'object') {
         const ref = this.fixedHeader
-          ? this.$refs["table-header-secondary"]
-          : this.$refs["table-header-primary"];
+          ? this.$refs['table-header-secondary']
+          : this.$refs['table-header-primary'];
         if (Array.isArray(initialSortBy)) {
           ref.setInitialSort(initialSortBy);
         } else {
           const hasField = Object.prototype.hasOwnProperty.call(
             initialSortBy,
-            "field"
+            'field'
           );
           if (hasField) ref.setInitialSort([initialSortBy]);
         }
@@ -1423,34 +1472,34 @@ export default {
         clearSelectionText,
         selectOnCheckboxOnly,
         selectAllByPage,
-        disableSelectInfo
+        disableSelectInfo,
       } = this.selectOptions;
 
-      if (typeof enabled === "boolean") {
+      if (typeof enabled === 'boolean') {
         this.selectable = enabled;
       }
 
-      if (typeof selectOnCheckboxOnly === "boolean") {
+      if (typeof selectOnCheckboxOnly === 'boolean') {
         this.selectOnCheckboxOnly = selectOnCheckboxOnly;
       }
 
-      if (typeof selectAllByPage === "boolean") {
+      if (typeof selectAllByPage === 'boolean') {
         this.selectAllByPage = selectAllByPage;
       }
 
-      if (typeof disableSelectInfo === "boolean") {
+      if (typeof disableSelectInfo === 'boolean') {
         this.disableSelectInfo = disableSelectInfo;
       }
 
-      if (typeof selectionInfoClass === "string") {
+      if (typeof selectionInfoClass === 'string') {
         this.selectionInfoClass = selectionInfoClass;
       }
 
-      if (typeof selectionText === "string") {
+      if (typeof selectionText === 'string') {
         this.selectionText = selectionText;
       }
 
-      if (typeof clearSelectionText === "string") {
+      if (typeof clearSelectionText === 'string') {
         this.clearSelectionText = clearSelectionText;
       }
     },
@@ -1465,17 +1514,17 @@ export default {
 
         //* if a custom sort function has been provided we use that
         const { sortFn } = column;
-        if (sortFn && typeof sortFn === "function") {
+        if (sortFn && typeof sortFn === 'function') {
           sortValue =
             sortValue ||
             sortFn(xvalue, yvalue, column, xRow, yRow) *
-              (this.sorts[i].type === "desc" ? -1 : 1);
+              (this.sorts[i].type === 'desc' ? -1 : 1);
         } else {
           //* else we use our own sort
           sortValue =
             sortValue ||
             column.typeDef.compare(xvalue, yvalue, column) *
-              (this.sorts[i].type === "desc" ? -1 : 1);
+              (this.sorts[i].type === 'desc' ? -1 : 1);
         }
       }
       return sortValue;
@@ -1522,11 +1571,11 @@ export default {
   },
 
   components: {
-    "vgt-pagination": VgtPagination,
-    "vgt-global-search": VgtGlobalSearch,
-    "vgt-header-row": VgtHeaderRow,
-    "vgt-table-header": VgtTableHeader,
-    "vgt-rows": VgtRows
+    'vgt-pagination': VgtPagination,
+    'vgt-global-search': VgtGlobalSearch,
+    'vgt-header-row': VgtHeaderRow,
+    'vgt-table-header': VgtTableHeader,
+    'vgt-rows': VgtRows,
   }
 };
 </script>

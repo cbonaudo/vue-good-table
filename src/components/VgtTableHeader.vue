@@ -1,57 +1,55 @@
 <template>
-  <thead>
-    <tr>
-      <th v-if="lineNumbers" class="line-numbers"></th>
-      <th v-if="selectable" class="vgt-checkbox-col">
-        <slot
-          name="header-checkbox-all"
-          :allSelected="allSelected"
-          :allSelectedIndeterminate="allSelectedIndeterminate"
-          :toggleSelectAll="toggleSelectAll"
-        >
-        <input
-            type="checkbox"
-            :checked="allSelected"
-            :indeterminate.prop="allSelectedIndeterminate"
-            aria-label="toggle select all"
-            @change="toggleSelectAll"
-          />
-        </slot>
-      </th>
-      <th
-        v-for="(column, index) in columns"
-        :key="index"
-        @click="sort($event, column)"
-        :class="getHeaderClasses(column, index)"
-        :style="columnStyles[index]"
-        v-if="!column.hidden"
+<thead>
+  <tr>
+    <th v-if="lineNumbers" class="line-numbers"></th>
+    <th v-if="selectable" class="vgt-checkbox-col">
+      <slot
+        name="header-checkbox-all"
+        :allSelected="allSelected"
+        :allSelectedIndeterminate="allSelectedIndeterminate"
+        :toggleSelectAll="toggleSelectAll"
       >
-        <slot name="table-column" :column="column">
-          <span>{{ column.label }}</span>
-        </slot>
-      </th>
-    </tr>
-    <tr
-      is="vgt-filter-row"
-      ref="filter-row"
-      @filter-changed="filterRows"
-      :global-search-enabled="searchEnabled"
-      :line-numbers="lineNumbers"
-      :selectable="selectable"
-      :columns="columns"
-      :mode="mode"
-      :typed-columns="typedColumns"
-    ></tr>
-  </thead>
+      <input
+          type="checkbox"
+          :checked="allSelected"
+          :indeterminate.prop="allSelectedIndeterminate"
+          aria-label="toggle select all"
+          @change="toggleSelectAll"
+        />
+      </slot>
+    </th>
+    <th v-for="(column, index) in columns"
+      :key="index"
+      @click="sort($event, column)"
+      :class="getHeaderClasses(column, index)"
+      :style="columnStyles[index]"
+      v-if="!column.hidden">
+      <slot name="table-column" :column="column">
+        <span>{{ column.label }}</span>
+      </slot>
+    </th>
+  </tr>
+  <tr
+    is="vgt-filter-row"
+    ref="filter-row"
+    @filter-changed="filterRows"
+    :global-search-enabled="searchEnabled"
+    :line-numbers="lineNumbers"
+    :selectable="selectable"
+    :columns="columns"
+    :mode="mode"
+    :typed-columns="typedColumns">
+  </tr>
+</thead>
 </template>
 
 <script>
-import assign from "lodash.assign";
-import VgtFilterRow from "./VgtFilterRow.vue";
-import * as SortUtils from "./utils/sort.js";
+import assign from 'lodash.assign';
+import VgtFilterRow from './VgtFilterRow.vue';
+import * as SortUtils from './utils/sort.js';
 
 export default {
-  name: "VgtTableHeader",
+  name: 'VgtTableHeader',
   props: {
     lineNumbers: {
       default: false,
@@ -135,18 +133,18 @@ export default {
       sorts: [],
     };
   },
-  computed: {},
+  computed: {
+  },
   methods: {
     reset() {
-      this.$refs["filter-row"].reset(true);
+      this.$refs['filter-row'].reset(true);
     },
     toggleSelectAll() {
-      this.$emit("on-toggle-select-all");
+      this.$emit('on-toggle-select-all');
     },
     isSortableColumn(column) {
       const { sortable } = column;
-      const isSortable =
-        typeof sortable === "boolean" ? sortable : this.sortable;
+      const isSortable = typeof sortable === 'boolean' ? sortable : this.sortable;
       return isSortable;
     },
     sort(e, column) {
@@ -158,34 +156,34 @@ export default {
       } else {
         this.sorts = SortUtils.primarySort(this.sorts, column);
       }
-      this.$emit("on-sort-change", this.sorts);
+      this.$emit('on-sort-change', this.sorts);
     },
 
     setInitialSort(sorts) {
       this.sorts = sorts;
-      this.$emit("on-sort-change", this.sorts);
+      this.$emit('on-sort-change', this.sorts);
     },
 
     getColumnSort(column) {
       for (let i = 0; i < this.sorts.length; i += 1) {
         if (this.sorts[i].field === column.field) {
-          return this.sorts[i].type || "asc";
+          return this.sorts[i].type || 'asc';
         }
       }
       return null;
     },
 
     getHeaderClasses(column, index) {
-      const classes = assign({}, this.getClasses(index, "th"), {
+      const classes = assign({}, this.getClasses(index, 'th'), {
         sortable: this.isSortableColumn(column),
-        "sorting sorting-desc": this.getColumnSort(column) === "desc",
-        "sorting sorting-asc": this.getColumnSort(column) === "asc",
+        'sorting sorting-desc': this.getColumnSort(column) === 'desc',
+        'sorting sorting-asc': this.getColumnSort(column) === 'asc',
       });
       return classes;
     },
 
     filterRows(columnFilters) {
-      this.$emit("filter-changed", columnFilters);
+      this.$emit('filter-changed', columnFilters);
     },
 
     getWidthStyle(dom) {
@@ -196,7 +194,7 @@ export default {
         };
       }
       return {
-        width: "auto",
+        width: 'auto',
       };
     },
 
@@ -211,9 +209,9 @@ export default {
           colStyles.push(this.getWidthStyle(cell));
         } else {
           colStyles.push({
-            minWidth: this.columns[i].width ? this.columns[i].width : "auto",
-            maxWidth: this.columns[i].width ? this.columns[i].width : "auto",
-            width: this.columns[i].width ? this.columns[i].width : "auto",
+            minWidth: this.columns[i].width ? this.columns[i].width : 'auto',
+            maxWidth: this.columns[i].width ? this.columns[i].width : 'auto',
+            width: this.columns[i].width ? this.columns[i].width : 'auto',
           });
         }
       }
@@ -222,9 +220,9 @@ export default {
 
     getColumnStyle(column, index) {
       const styleObject = {
-        minWidth: column.width ? column.width : "auto",
-        maxWidth: column.width ? column.width : "auto",
-        width: column.width ? column.width : "auto",
+        minWidth: column.width ? column.width : 'auto',
+        maxWidth: column.width ? column.width : 'auto',
+        width: column.width ? column.width : 'auto',
       };
       //* if fixed header we need to get width from original table
       if (this.tableRef) {
@@ -239,13 +237,13 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("resize", this.setColumnStyles);
+    window.addEventListener('resize', this.setColumnStyles);
   },
   beforeDestroy() {
-    window.removeEventListener("resize", this.setColumnStyles);
+    window.removeEventListener('resize', this.setColumnStyles);
   },
   components: {
-    "vgt-filter-row": VgtFilterRow,
+    'vgt-filter-row': VgtFilterRow,
   },
 };
 </script>
