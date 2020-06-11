@@ -1,11 +1,11 @@
 <template>
 <tr>
-  <th
+  <td
     v-if="headerRow.mode === 'span'"
     class="vgt-left-align vgt-row-header"
     :colspan="fullColspan"
     @click="collapsable ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
-    <span v-if="collapsable" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
+    <span v-if="collapsable" class="triangle" :class="{ expand: headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       name="table-header-row">
@@ -15,30 +15,22 @@
         {{ headerRow.label }}
       </span>
     </slot>
-  </th>
+  </td>
   <!-- if the mode is not span, we display every column -->
   <th
     class="vgt-row-header"
     v-if="headerRow.mode !== 'span' && lineNumbers"></th>
   <th
     class="vgt-row-header"
-    v-if="headerRow.mode !== 'span' && selectable">
-    <span v-if="columnCollapsable(-1)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"
-      @click="columnCollapsable(-1) ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}"></span>
-    <input
-      type="checkbox"
-      @click.stop="onCheckboxClicked(headerRow, 0, $event)"
-      :checked="headerRow.vgtSelected"
-    />
-  </th>
-  <th
+    v-if="headerRow.mode !== 'span' && selectable"></th>
+  <td
     v-if="headerRow.mode !== 'span' && !column.hidden"
     v-for="(column, i) in columns"
     :key="i"
     class="vgt-row-header"
     :class="getClasses(i, 'td')"
     @click="columnCollapsable(i) ? $emit('vgtExpand', !headerRow.vgtIsExpanded) : () => {}">
-    <span v-if="columnCollapsable(i)" class="triangle" :class="{ 'expand': headerRow.vgtIsExpanded }"></span>
+    <span v-if="columnCollapsable(i)" class="triangle" :class="{ expand: headerRow.vgtIsExpanded }"></span>
     <slot
       :row="headerRow"
       :column="column"
@@ -50,7 +42,7 @@
       <span v-if="column.html" v-html="collectFormatted(headerRow, column, true)">
       </span>
     </slot>
-  </th>
+  </td>
 </tr>
 </template>
 
@@ -72,7 +64,7 @@ export default {
     },
     collapsable: {
       type: [Boolean, Number],
-      default: false
+      default: false,
     },
     collectFormatted: {
       type: Function,
@@ -86,13 +78,18 @@ export default {
     fullColspan: {
       type: Number,
     },
-    onCheckboxClicked: {
-      type: Function,
-    },
   },
   data() {
     return {
     };
+  },
+  watch: {
+    headerRow: {
+      deep: true,
+      handler() {
+        this.$set(this.headerRow, 'vgtSelected', this.allSelected);
+      }
+    }
   },
   computed: {
   },
@@ -107,7 +104,7 @@ export default {
   mounted() {
   },
   components: {
-  },
+  }
 };
 </script>
 

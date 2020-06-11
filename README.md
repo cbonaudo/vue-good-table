@@ -10,20 +10,20 @@ An easy to use, clean and powerful data table for VueJS with essential features 
 
 Did vue-good-table just save you a bunch of time? Use some of them extra minutes to spread the joy!
 
-<!-- 
+<!--
 ### Basic Table
 ![Basic Screenshot](README/images/vgt-table.regular.png) -->
 
 <!-- ## Recipes
-Some example recipes for inspiration 
+Some example recipes for inspiration
 [vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x)) -->
-<!-- 
+<!--
 ## Table of contents -->
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-<!-- 
+<!--
 - [Getting Started](#getting-started)
   - [Installing](#installing)
   - [Example Usage](#example-usage)
@@ -73,6 +73,7 @@ Some example recipes for inspiration
 ## Installing
 
 Install with npm:
+
 ```bash
 npm install --save vue-good-table
 ```
@@ -80,15 +81,16 @@ npm install --save vue-good-table
 Import globally in app:
 
 ```javascript
-import VueGoodTablePlugin from 'vue-good-table';
+import VueGoodTablePlugin from "vue-good-table";
 
-// import the styles 
-import 'vue-good-table/dist/vue-good-table.css'
+// import the styles
+import "vue-good-table/dist/vue-good-table.css";
 
 Vue.use(VueGoodTablePlugin);
 ```
 
 Import into your component
+
 ```js
 import { VueGoodTable } from 'vue-good-table';
 
@@ -99,6 +101,7 @@ components: {
 ```
 
 Import into your component using Typescript
+
 ```typescript
 // add to component
 components: {
@@ -106,25 +109,263 @@ components: {
 }
 ```
 
-
 ##### Example table with grouped rows and column filters
+
 ![Advanced Screenshot](README/images/vgt-table.advanced.png)
 
 ## Features
-* [Table Search](https://xaksis.github.io/vue-good-table/guide/configuration/search-options.html)
-* [Sorting](https://xaksis.github.io/vue-good-table/guide/configuration/sort-options.html)
-* [Column Filtering](https://xaksis.github.io/vue-good-table/guide/configuration/column-filter-options.html#filteroptions)
-* [Pagination](https://xaksis.github.io/vue-good-table/guide/configuration/pagination-options.html)
-* [Highly Customizable](https://xaksis.github.io/vue-good-table/guide/advanced/#custom-row-template)
-* [Checkbox Table](https://xaksis.github.io/vue-good-table/guide/advanced/checkbox-table.html)
-* [Grouped Rows Table](https://xaksis.github.io/vue-good-table/guide/advanced/grouped-table.html)
-* [Server Powered Table](https://xaksis.github.io/vue-good-table/guide/advanced/remote-workflow.html#why-remote-mode)
-* [Customizable Style and Themes](https://xaksis.github.io/vue-good-table/guide/style-configuration/)
+
+- [Table Search](https://xaksis.github.io/vue-good-table/guide/configuration/search-options.html)
+- [Sorting](https://xaksis.github.io/vue-good-table/guide/configuration/sort-options.html)
+- [Column Filtering](https://xaksis.github.io/vue-good-table/guide/configuration/column-filter-options.html#filteroptions)
+- [Pagination](https://xaksis.github.io/vue-good-table/guide/configuration/pagination-options.html)
+- [Highly Customizable](https://xaksis.github.io/vue-good-table/guide/advanced/#custom-row-template)
+- [Checkbox Table](https://xaksis.github.io/vue-good-table/guide/advanced/checkbox-table.html)
+- [Grouped Rows Table](https://xaksis.github.io/vue-good-table/guide/advanced/grouped-table.html)
+- [Server Powered Table](https://xaksis.github.io/vue-good-table/guide/advanced/remote-workflow.html#why-remote-mode)
+- [Customizable Style and Themes](https://xaksis.github.io/vue-good-table/guide/style-configuration/)
 
 ## Upgrade Guide
+
 Hey there! coming from 1.x? find the [upgrade guide here](https://github.com/xaksis/vue-good-table/wiki/Guide-to-upgrade-from-1.x-to-v2.0)
 
-<!-- 
+# Vue Good Table
+
+[[toc]]
+
+## Introduction
+
+For the needs of the application, a fork of a public npm package (vue-good-table) has been modified. The main modification need was to handle a nested table, that could handle rows with children, which had themselves possibly children.
+
+A lot of informations can be found on the library's website : xaksis.github.io/vue-good-table
+
+Ajouté dans le comet design system : OrganismNestedTable
+
+## Parameters Needed
+
+The library expects 2 main parameters :
+
+- columns : an array of object, containing the description of the columns displayed ("label", the name displayed, "field", the name of the column, "type": the type of the column)
+
+```js
+columns: [
+  {
+    label: 'Name',
+    field: 'name',
+  },
+  {
+    label: 'Diet',
+    field: 'diet',
+    type: 'text',
+  },
+  {
+    label: 'Count',
+    field: 'count',
+    type: 'number',
+  },
+],
+```
+
+- rows : an array of object, containing the data displayed, with fields corresponding to the columns we have provided. If we need a row to have a child row, this child needs to be defined in the "children" field. All subsequent children must also be defined in the "children" field of their respective parent.
+
+```js
+rows: [
+  {
+    name: 'Animals',
+    diet: 'omnivore',
+    count: '100',
+    children: [
+      {
+        name: 'Reptiles',
+        diet: 'carnivore',
+        count: 40,
+        children: [
+          { name: 'lizard', diet: 'insectivore', count: 34 },
+          { name: 'crocodile', diet: 'carnivore', count: 22 },
+          { name: 'turtles', diet: 'herbivore', count: 29 },
+        ],
+      },
+      {
+        name: 'Mamals',
+        diet: 'omnivore',
+        count: 40,
+        children: [
+          { name: 'Elephant', diet: 'herbivore', count: 5 },
+          { name: 'Cat', diet: 'carnivore', count: 28 },
+          { name: 'Dog', diet: 'omnivore', count: 12 },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Exotic Fruts',
+    diet: 'Bacteries',
+    count: '100',
+    children: [
+      {
+        name: 'Asian',
+        diet: '',
+        count: 10,
+        children: [{ name: 'AppleSina', diet: 'insectivore', count: 34 }],
+      },
+      {
+        name: 'African',
+        diet: '',
+        count: 20,
+        children: [
+          { name: 'Plantain', diet: 'insectivore', count: 34 },
+          { name: 'Kumquat', diet: 'carnivore', count: 22 },
+          { name: 'Kiwi', diet: 'herbivore', count: 29 },
+        ],
+      },
+      {
+        name: 'American',
+        diet: 'carnivore',
+        count: 40,
+        children: [
+          { name: 'Watermelon', diet: 'insectivore', count: 34 },
+          { name: 'Melon', diet: 'carnivore', count: 22 },
+          { name: 'Apples', diet: 'herbivore', count: 29 },
+        ],
+      },
+    ],
+  },
+],
+```
+
+Some parameters are used to manipulate the table :
+
+- style-class : Allows to pass a class for the rows (String)
+- mode : Allow the sorting and searching to be powered by server side instead of client side ("remote" if yes)
+
+```js
+:styleClass: "rowClass"
+mode: "remote"
+```
+
+SearchOptions :
+
+- enabled : Display a search input for the whole table (boolean)
+- searchFn : Specify our own search function (Function)
+- placeholder : Specify a placeholder for the input (String)
+- externalQuery : Specify our own input for the table search (String)
+
+```js
+:search-options="{
+  enabled: true,
+  searchFn: searchFunction,
+  placeholder: "Search the table...",
+  externalQuery: searchString,
+}"
+```
+
+SortOptions :
+
+- enabled : Enable sorting (boolean)
+- initialSortBy : Specify a default sort type (array of object (or single object), with "field", defining the column, and "type", defining asc or desc)
+- depth-level : Define which level of depth will be sorted (0 for header rows, 1 for first child rows, etc... 1 by default)
+
+```js
+:sort-options="{
+  enable: true,
+  initialSortBy: { field: "name", type: "asc" },
+  depthLevel: 0,
+}"
+```
+
+GroupOptions :
+
+- enabled : Allow to have parent rows for the table (boolean, needed for the nested table)
+- collapsable : Allows to control in which column the "expand" arrow is located (if the row has children), "-1" put the arrow in the checkbox column, "true" put the arrow in the first "data" column, all number from "1" and more put the arrow in the related data column.
+
+```js
+:group-options="{
+  enabled: true,
+  headerPosition: 'top',
+  collapsable: collapsable,
+}"
+```
+
+SelectOptions :
+
+- enabled : Allow to have checkboxes displayed in a column, to select rows (boolean).
+- selectOnCheckboxOnly : Determine if the whole row can be clicked to select it (boolean).
+- selectHeader : Determine if the header can be selected (boolean).
+
+```js
+:select-options="{
+  enabled: true,
+  selectOnCheckboxOnly: true,
+  selectHeader: true,
+}"
+```
+
+## Events
+
+A few events are defined to help us manipulate the data externaly to the library.
+
+- @on-sort-change : emitted when the sort is activated for a column
+
+```js
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  @on-sort-change="onSortChange">
+```
+
+```js
+methods: {
+  onSortChange(params) {
+    // params[0].sortType - ascending or descending
+    // params[0].columnIndex - index of column being sorted
+  }
+}
+```
+
+- @on-select-all : emitted when the selectAll checkbox is selected
+
+```js
+<vue-good-table
+  :columns="columns"
+  :rows="rows"
+  :select-options="{ enabled: true }"
+  @on-select-all="onSelectAll">
+```
+
+```js
+methods: {
+  onSelectAll(params) {
+    // params.selected - whether the select-all checkbox is checked or unchecked
+    // params.selectedRows - all rows that are selected
+  }
+}
+```
+
+- @on-selected-rows-change : emitted when the selection is changed
+
+```js
+<vue-good-table
+ :columns="columns"
+ :rows="rows"
+ :select-options="{ enabled: true }"
+ @on-selected-rows-change="selectionChanged">
+```
+
+```js
+methods: {
+  selectionChanged(params) {
+    // params.selectedRows - all rows that are selected
+  }
+}
+```
+
+## Slots
+
+- table-header-row : Allow to redefine the content of a cell (row[column])
+- table-row : Same but for the child rows
+- empty-state : Define what is displayed when the table is empty
+
+<!--
 ### Example Usage
 ```html
 <template>
@@ -189,7 +430,7 @@ export default {
 };
 </script>
 ``` -->
-<!-- 
+<!--
 ## Configuration
 ### Component Options
 #### Table
@@ -248,7 +489,7 @@ Show line number for each row
 ##### mode `String`
 Set mode=`remote` to allow sorting/filtering etc to be powered by server side instead of client side. Setting mode to remote, expects the following workflow:
 
-* pagination, sort, filter, search will emit [Table Events](#table-events) (loading div appears) 
+* pagination, sort, filter, search will emit [Table Events](#table-events) (loading div appears)
 * setup handlers for each event
 * in the handler call backend endpoints with the table params
 * update rows object with the returned response ( the loading div will disappear once you update the rows object)
@@ -279,7 +520,7 @@ Set of options related to table sorting
 ```
 
 ##### sortOptions.enabled `Boolean (default: true)`
-Enable/disable sorting on table as a whole. 
+Enable/disable sorting on table as a whole.
 ```html
 <vue-good-table
   :columns="columns"
@@ -400,7 +641,7 @@ enables/disables 'All' in the per page dropdown.
 ```
 
 ##### paginationOptions.setCurrentPage `Number`
-set current page programmatically. 
+set current page programmatically.
 > There's no validation for number of pages so please be careful using this.
 ```html
 <vue-good-table
@@ -414,7 +655,7 @@ set current page programmatically.
 ```
 
 ##### pagination label/text options
-you can change one or more of the texts shown on pagination by overriding the labels in the following way: 
+you can change one or more of the texts shown on pagination by overriding the labels in the following way:
 ```html
 <vue-good-table
   :columns="columns"
@@ -451,7 +692,7 @@ Search options explained below
 
 ##### searchOptions.enabled `Boolean (default: false)`
 
-Allows a single search input for the whole table 
+Allows a single search input for the whole table
 
 >Note: enabling this option disables column filters
 ```html
@@ -465,7 +706,7 @@ Allows a single search input for the whole table
 ```
 
 ##### searchOptions.trigger `String (default: '')`
-Allows you to specify if you want search to trigger on 'enter' event of the input. By default table searches on key-up. 
+Allows you to specify if you want search to trigger on 'enter' event of the input. By default table searches on key-up.
 
 ```html
 <vue-good-table
@@ -540,7 +781,7 @@ data(){
 ```
 
 #### Checkbox Table
-Creating table with selectable rows (checkboxes) is easier than ever. 
+Creating table with selectable rows (checkboxes) is easier than ever.
 ![Checkbox Screenshot](README/images/vgt-table.checkbox.png)
 
 ##### selectOptions `Object`
@@ -569,14 +810,14 @@ Object containing select options
 Sometimes you have a hierarchy in table and you want to group rows under subheadings, vue-good-table allows you to do that as well. Following properties relate to row grouping
 
 ##### groupOptions `Object`
-Object containing group related options. 
+Object containing group related options.
 ```html
 <vue-good-table
   :columns="columns"
   :rows="rows"
   :group-options="{
     enabled: true,
-    headerPosition: 'bottom' 
+    headerPosition: 'bottom'
   }">
  ```
 > rows are formatted differently for grouped tables, refer to [Grouped Rows](#grouped-rows) section.
@@ -607,18 +848,18 @@ Allows providing custom styles for rows. It can be a string: 'my-class' or a fun
 ```
 ```javascript
 // in methods
-myStyleFn(row){ 
-  // if row has something return a specific class 
+myStyleFn(row){
+  // if row has something return a specific class
   if(row.fancy) {
     return 'fancy-class';
   }
   return '';
 }
-```      
+```
 
 ##### theme `String`
-Allows using other themes. 
-Included themes: 
+Allows using other themes.
+Included themes:
 * [nocturnal](#nocturnal-themenocturnal)
 * [black-rhino](#black-rhino-themeblack-rhino)
 
@@ -641,7 +882,7 @@ Text to put on column header.
 
 ```javascript
 columns: [
-  { 
+  {
     label: 'name'
   },
   // ...
@@ -650,14 +891,14 @@ columns: [
 
 ##### field `String`
 
-Row object property that this column corresponds to. This can be: 
+Row object property that this column corresponds to. This can be:
 
 * String <code>eg: 'name'</code> - simple row property name
 * String <code>eg: 'location.lat'</code>- nested row property name. lets say if the row had a property 'location' which was an object containing 'lat' and 'lon'
 * Function - a function that returns a value to be displayed based on the row object
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: this.fealdFn,
   },
@@ -680,7 +921,7 @@ type of column. default: 'text'. This determines the formatting for the column a
 
 ```javascript
 columns: [
-  { 
+  {
     label: 'joined On',
     field: 'createdAt',
     type: 'date',
@@ -701,7 +942,7 @@ provide the format for output date
 enable/disable sorting on columns. This property is higher priority than global sortable property
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     sortable: false,
@@ -759,7 +1000,7 @@ formatFn: function(value) {
 ```
 
 ##### html `Boolean`
-indicates whether this column will require html rendering. 
+indicates whether this column will require html rendering.
 > The preferred way of creating columns that have html is by [using slots](#custom-row-template)
 ```javascript
 // in data
@@ -784,7 +1025,7 @@ provide a width value for this column
 
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     width: '50px',
@@ -797,7 +1038,7 @@ columns: [
 hide a column
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     hidden: true,
@@ -810,7 +1051,7 @@ columns: [
 provide custom class(es) to the table header
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     thClass: 'custom-th-class',
@@ -823,7 +1064,7 @@ columns: [
 provide custom class(es) to the table cells
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     tdClass: 'text-center',
@@ -836,7 +1077,7 @@ columns: [
 if true, this column will be ignored by the global search
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     globalSearchDisabled: true,
@@ -850,7 +1091,7 @@ A collection of filter specific properties. You can find more about these proper
 
 ```javascript
 columns: [
-  { 
+  {
     label: 'name',
     field: 'user_name',
     filterOptions: {
@@ -859,7 +1100,7 @@ columns: [
       filterValue: 'Jane', // initial populated value for this filter
       filterDropdownItems: [], // dropdown (with selected values) instead of text input
       filterFn: this.columnFilterFn, //custom filter function that
-      trigger: 'enter', //only trigger on enter not on keyup 
+      trigger: 'enter', //only trigger on enter not on keyup
     },
   },
   // ...
@@ -877,10 +1118,10 @@ allows creating a dropdown for filter as opposed to an input
 //array
 filterDropdownItems: ['Blue', 'Red', 'Yellow']
 //or
-filterDropdownItems: [  
-  { value: 'n', text: 'Inactive' },  
-  { value: 'y', text: 'Active' },  
-  { value: 'c', text: 'Check' }  
+filterDropdownItems: [
+  { value: 'n', text: 'Inactive' },
+  { value: 'y', text: 'Active' },
+  { value: 'c', text: 'Check' }
 ],
 ```
 
@@ -908,9 +1149,9 @@ event emitted on table row click
  ```javascript
  methods: {
    onRowClick(params) {
-     // params.row - row object 
+     // params.row - row object
      // params.pageIndex - index of this row on the current page.
-     // params.selected - if selection is enabled this argument 
+     // params.selected - if selection is enabled this argument
      // indicates selected or not
      // params.event - click event
    }
@@ -928,14 +1169,14 @@ event emitted on table cell click
  ```javascript
  methods: {
    onCellClick(params) {
-     // params.row - row object 
+     // params.row - row object
      // params.column - column object
      // params.rowIndex - index of this row on the current page.
      // params.event - click event
    }
  }
  ```
- 
+
  #### @on-row-mouseenter
 event emitted on row mouseenter
 ```html
@@ -947,12 +1188,12 @@ event emitted on row mouseenter
  ```javascript
  methods: {
    onRowMouseover(params) {
-     // params.row - row object 
+     // params.row - row object
      // params.pageIndex - index of this row on the current page.
    }
  }
  ```
- 
+
  #### @on-row-mouseleave
 event emitted on table row mouseleave
 ```html
@@ -964,12 +1205,12 @@ event emitted on table row mouseleave
  ```javascript
  methods: {
    onRowMouseleave(row, pageIndex) {
-     // row - row object 
+     // row - row object
      // pageIndex - index of this row on the current page.
    }
  }
  ```
- 
+
 #### @on-search
 event emitted on global search (when global search is enabled)
 ```html
@@ -986,7 +1227,7 @@ event emitted on global search (when global search is enabled)
    }
  }
  ```
- 
+
 #### @on-page-change
 event emitted on pagination page change (when pagination is enabled)
 ```html
@@ -1004,7 +1245,7 @@ event emitted on pagination page change (when pagination is enabled)
    }
  }
  ```
- 
+
 #### @on-per-page-change
 event emitted on per page dropdown change (when pagination is enabled)
 ```html
@@ -1039,7 +1280,7 @@ methods: {
   }
 }
 ```
- 
+
 
 #### @on-select-all
 event emitted when all is selected (only emitted for checkbox tables)
@@ -1057,7 +1298,7 @@ event emitted when all is selected (only emitted for checkbox tables)
    }
  }
  ```
- 
+
  #on-selected-rows-change
  event emitted each time selectedRows has changed
  ```html
@@ -1073,7 +1314,7 @@ event emitted when all is selected (only emitted for checkbox tables)
     }
   }
   ```
- 
+
  #### @on-column-filter
 event emitted when column is filtered (only emitted for remote mode)
 ```html
@@ -1132,9 +1373,9 @@ vue-good-table also supports dynamic td templates where you dictate how to displ
   </template>
 </vue-good-table>
 ```
-**Note:** 
+**Note:**
 * The original row object can be accessed via `props.row`
-* The currently displayed table row index can be accessed via `props.index` . 
+* The currently displayed table row index can be accessed via `props.index` .
 * The original row index can be accessed via `props.row.originalIndex`. You can then access the original row object by using `rows[props.row.originalIndex]`.
 * The column object can be accessed via `props.column`
 * You can access the formatted row data (for example - formatted date) via `props.formattedRow`
@@ -1157,7 +1398,7 @@ Sometimes you might want to use custom column formatting. You can do that in the
 ```
 
 ### Grouped Rows
-To create grouped rows, you need two things. 
+To create grouped rows, you need two things.
 1. add groupOptions to table component
 ```html
 <vue-good-table
@@ -1169,7 +1410,7 @@ To create grouped rows, you need two things.
 </vue-good-table>
 ```
 
-2. make sure the rows are formatted correctly. grouped rows need to be nested with headers rows containing rows in their children property. For example: 
+2. make sure the rows are formatted correctly. grouped rows need to be nested with headers rows containing rows in their children property. For example:
 
 ```javascript
 rows: [{
@@ -1209,7 +1450,7 @@ rows: [{
 </vue-good-table>
 ```
 
-you can check out some live examples on the recipes page: 
+you can check out some live examples on the recipes page:
 [vue-good-table Recipes](https://github.com/xaksis/vue-good-table/wiki/Vue-good-table-Recipes-(vue-good-table-2.x))
 
 
@@ -1224,7 +1465,7 @@ If you want to add table specific actions like a print button for example, you c
   :columns="columns"
   :rows="rows">
   <div slot="table-actions">
-    This will show up on the top right of the table. 
+    This will show up on the top right of the table.
   </div>
 </vue-good-table>
 ```
@@ -1241,13 +1482,13 @@ You can provide html for empty state slot as well. Example:
     This will show up when there are no columns
   </div>
 </vue-good-table>
-``` 
+```
 
 ## Use with multiple depth children
 
 All rows provided (and their children) must contains a children property, with an array of rows, following the same pattern as the first parent row :
 [
-  { 
+  {
     name: "John", diet: "Pizza", children: [
     { name: "Johnson", diet: "Various", children: [
       { name: "Sally", diet: "Meat"},
@@ -1260,7 +1501,7 @@ All rows provided (and their children) must contains a children property, with a
 ]
 A headerfield can be passed to a column to calculte, for example the total sum of a parent
 
-GroupOptions.collapsable allows to pass -1 to add the expand arrow in the checkbox column.
+GroupOptions.collapsable allows to pass -1 to add the expand arrow in the checkbox column. true is used for the 1st data column
 
 SortOptions.depthLevel (default 1, based on 0) allows to sort the array of array at the depth selected
 
@@ -1268,8 +1509,8 @@ SortOptions.depthLevel (default 1, based on 0) allows to sort the array of array
 
 ## Authors
 
-* [xaksis](https://github.com/xaksis)
-* [Other Contributors](https://github.com/xaksis/vue-good-table/graphs/contributors)
+- [xaksis](https://github.com/xaksis)
+- [Other Contributors](https://github.com/xaksis/vue-good-table/graphs/contributors)
 
 ## License
 

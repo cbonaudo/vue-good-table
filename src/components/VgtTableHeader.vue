@@ -3,11 +3,20 @@
   <tr>
     <th v-if="lineNumbers" class="line-numbers"></th>
     <th v-if="selectable" class="vgt-checkbox-col">
+      <slot
+        name="header-checkbox-all"
+        :allSelected="allSelected"
+        :allSelectedIndeterminate="allSelectedIndeterminate"
+        :toggleSelectAll="toggleSelectAll"
+      >
       <input
-        type="checkbox"
-        :checked="allSelected"
-        :indeterminate.prop="allSelectedIndeterminate"
-        @change="toggleSelectAll" />
+          type="checkbox"
+          :checked="allSelected"
+          :indeterminate.prop="allSelectedIndeterminate"
+          aria-label="toggle select all"
+          @change="toggleSelectAll"
+        />
+      </slot>
     </th>
     <th v-for="(column, index) in columns"
       :key="index"
@@ -16,7 +25,7 @@
       :style="columnStyles[index]"
       v-if="!column.hidden">
       <slot name="table-column" :column="column">
-        <span>{{column.label}}</span>
+        <span>{{ column.label }}</span>
       </slot>
     </th>
   </tr>
@@ -239,6 +248,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

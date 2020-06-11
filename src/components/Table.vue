@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div 
     :class="wrapStyleClasses">
     <div v-if="isLoading" class="vgt-loading vgt-center-align">
       <slot name="loadingContent">
@@ -53,7 +53,7 @@
         :class="selectionInfoClass"
       >
         {{selectionInfo}}
-        <a
+        <a 
           href=""
           @click.prevent="unselectAllInternal(true)"
         >
@@ -89,16 +89,20 @@
             :paginated="paginated"
             :table-ref="$refs.table"
           >
-            <template
-              slot="table-column"
+            <template 
+              slot="table-column" 
               slot-scope="props"
             >
               <slot
-                name="table-column"
+                name="table-column" 
                 :column="props.column"
               >
                 <span>{{props.column.label}}</span>
               </slot>
+            </template>
+
+            <template slot="header-checkbox-all" slot-scope="props">
+              <slot name="header-checkbox-all" v-bind="props" />
             </template>
           </thead>
         </table>
@@ -140,6 +144,10 @@
                 <span>{{props.column.label}}</span>
               </slot>
             </template>
+
+            <template slot="header-checkbox-all" slot-scope="props">
+              <slot name="header-checkbox-all" v-bind="props" />
+            </template>
           </thead>
 
           <!-- Table body starts here -->
@@ -149,14 +157,13 @@
           >
             <!-- if group row header is at the top -->
             <vgt-header-row
-              v-if="groupHeaderOnTop"
+              v-if="groupHeaderOnTop && hasHeader"
               @vgtExpand="toggleExpand(index)"
               :header-row="headerRow"
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
               :collapsable="groupOptions.collapsable"
-              :onCheckboxClicked="onCheckboxClicked"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
@@ -177,13 +184,13 @@
               </template>
             </vgt-header-row>
             <!-- normal rows here. we loop over all rows -->
-            <vgt-rows 
-              v-if="headerRow.children && headerRow.children.length"
-              v-for="(row, index) in headerRow.children"
+            <vgt-rows
+              v-for="(row, index) in getRows(headerRow)"
               :key="index"
               :index="index"
               :headerRow="headerRow"
               :row="row"
+              :hasHeader="hasHeader"
               :groupOptions="groupOptions"
               :getRowStyleClass="getRowStyleClass"
               :getClasses="getClasses"
@@ -202,25 +209,27 @@
               :onRowAuxClicked="onRowAuxClicked"
               :onCheckboxClicked="onCheckboxClicked"
               :onCellClicked="onCellClicked"
-              >
-              <template
-                slot="table-header-row"
-                slot-scope="props">
+            >
+              <template slot="table-row" slot-scope="props">
                 <slot
                   name="table-row"
                   :row="props.row"
                   :column="props.column"
                   :formattedRow="formattedRow(props.row)"
-                  :index="props.index">
+                  :index="props.index"
+                >
                   <span v-if="!props.column.html">
-                      {{ collectFormatted(props.row, props.column) }}
+                    {{ collectFormatted(props.row, props.column) }}
                   </span>
                   <span
-                      v-if="props.column.html"
-                      v-html="collect(props.row, column.field)"
+                    v-if="props.column.html"
+                    v-html="collect(props.row, column.field)"
                   >
                   </span>
                 </slot>
+              </template>
+              <template #checkbox="props">
+                <slot name="checkbox" v-bind="props" />
               </template>
             </vgt-rows>
             <!-- if group row header is at the bottom -->
@@ -230,7 +239,6 @@
               :columns="columns"
               :line-numbers="lineNumbers"
               :selectable="selectable"
-              :onCheckboxClicked="onCheckboxClicked"
               :collect-formatted="collectFormatted"
               :formatted-row="formattedRow"
               :get-classes="getClasses"
@@ -328,6 +336,7 @@ export default {
     isLoading: { default: null, type: Boolean },
     maxHeight: { default: null, type: String },
     fixedHeader: { default: false, type: Boolean },
+    hasHeader: { default: true, type: Boolean },
     theme: { default: '' },
     mode: { default: 'local' }, // could be remote
     totalRows: {}, // required if mode = 'remote'
@@ -366,7 +375,7 @@ export default {
         return {
           enabled: true,
           initialSortBy: {},
-          depthLevel: 1
+          depthLevel: 1,
         };
       },
     },
@@ -507,7 +516,7 @@ export default {
     selectedRows(newValue, oldValue) {
       if (!isEqual(newValue, oldValue)) {
         this.$emit('on-selected-rows-change', {
-          selectedRows: this.selectedRows,
+          selectedRows: this.selectedRows
         });
       }
     },
@@ -761,7 +770,12 @@ export default {
       }
       if (this.sorts.length) {
         //* we need to sort
-        this.recursiveSort(computedRows, this.sortOptions.depthLevel === undefined ? 1 : this.sortOptions.depthLevel  );
+        this.recursiveSort(
+          computedRows,
+          this.sortOptions.depthLevel === undefined
+            ? 1
+            : this.sortOptions.depthLevel
+        );
       }
 
       // if the filtering is event based, we need to maintain filter
@@ -772,7 +786,7 @@ export default {
 
       return computedRows;
     },
-    
+
     paginated() {
       if (!this.processedRows.length) return [];
 
@@ -829,7 +843,7 @@ export default {
         nestedRows = this.handleGrouped([
           {
             label: 'no groups',
-            children: rows,
+            children: rows
           },
         ]);
       } else {
@@ -862,6 +876,15 @@ export default {
   },
 
   methods: {
+    getRows(headerRow) {
+      if (headerRow.children && headerRow.children.length) {
+        if (this.hasHeader) {
+          return headerRow.children;
+        }
+        return [headerRow];
+      }
+      return [];
+    },
     toggleExpand(index) {
       let headerRow = this.filteredRows[index];
       if (headerRow) {
@@ -912,7 +935,7 @@ export default {
         selectedRows: this.selectedRows,
       });
     },
-    
+
     recursiveSelect(rows, newValue) {
       each(rows, (row) => {
         this.$set(row, 'vgtSelected', newValue);
@@ -923,7 +946,7 @@ export default {
     unselectAllInternal(forceAll) {
       const rows =
         this.selectAllByPage && !forceAll ? this.paginated : this.filteredRows;
-      this.recursiveSelect(rows, false)
+      this.recursiveSelect(rows, false);
       this.emitSelectedRows();
     },
 
@@ -933,7 +956,7 @@ export default {
         return;
       }
       const rows = this.selectAllByPage ? this.paginated : this.filteredRows;
-      this.recursiveSelect(rows, true)
+      this.recursiveSelect(rows, true);
       this.emitSelectedRows();
     },
 
@@ -1481,7 +1504,7 @@ export default {
       }
     },
 
-    sorting(xRow, yRow)  {
+    sorting(xRow, yRow) {
       //* we need to get column for each sort
       let sortValue;
       for (let i = 0; i < this.sorts.length; i += 1) {
@@ -1509,7 +1532,9 @@ export default {
 
     recursiveSort(rows, depthLevelRemaining) {
       if (depthLevelRemaining && rows[0].children) {
-        rows.forEach((row) => this.recursiveSort(row.children, --depthLevelRemaining));
+        rows.forEach(row =>
+          this.recursiveSort(row.children, --depthLevelRemaining)
+        );
       } else {
         rows.sort(this.sorting);
       }
@@ -1518,25 +1543,24 @@ export default {
     recursiveRowCount(row) {
       let total = 0;
       if (row.children) {
-        row.children.forEach((child) => {
+        row.children.forEach(child => {
           total++;
           total += this.recursiveRowCount(child);
         });
       }
       return total;
     },
-    
+
     recursiveSelectedRows(row) {
-      let selectedRows = []
+      let selectedRows = [];
       if (row.vgtSelected) {
         selectedRows.push(row);
       }
-      each(row.children, (child) => {
+      each(row.children, child => {
         selectedRows.push(...this.recursiveSelectedRows(child));
       });
       return selectedRows;
-    },
-
+    }
   },
 
   mounted() {
@@ -1552,7 +1576,7 @@ export default {
     'vgt-header-row': VgtHeaderRow,
     'vgt-table-header': VgtTableHeader,
     'vgt-rows': VgtRows,
-  },
+  }
 };
 </script>
 
